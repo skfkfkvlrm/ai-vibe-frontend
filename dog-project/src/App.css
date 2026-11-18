@@ -331,3 +331,30 @@ a.btn {
   text-align: center;
   color: var(--text-muted);
 }
+
+/* 추가 페이지 탭 */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tabs .btn[aria-selected='true'] {
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+/* 삭제된 개 복구 목록: 이미지, 품종, 가격, 삭제 시각, 버튼 */
+.cart-list.deleted-list li {
+  grid-template-columns: 72px 1fr auto auto auto;
+}
+
+.deleted-at {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.deleted-actions {
+  display: flex;
+  gap: 8px;
+}

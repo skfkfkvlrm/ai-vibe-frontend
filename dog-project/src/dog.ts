@@ -19,3 +19,17 @@ export function imageUrl(image: string | null): string {
 export function show(value: string | number | null, unit = ''): string {
   return value === null || value === undefined || value === '' ? '-' : `${value}${unit}`
 }
+
+// GET /api/deleted 응답. soft delete된 개의 복구 화면 표시용 항목만 담는다.
+export type DeletedDog = {
+  id: number
+  kind: string
+  price: number | null
+  image: string | null
+  deletedAt: string
+}
+
+// 서버가 시간대 없는 LocalDateTime('2026-11-18T17:30:00.123')을 주므로 변환 없이 그대로 보기 좋게 자른다.
+export function showDateTime(value: string): string {
+  return value.replace('T', ' ').slice(0, 19)
+}

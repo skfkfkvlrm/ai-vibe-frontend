@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
+import AddPage from './AddPage'
 import DogCard from './DogCard'
 import DogForm from './DogForm'
 import Toast from './Toast'
@@ -131,8 +132,11 @@ function App() {
     return () => controller.abort()
   }, [reloadKey])
 
+  // 복구처럼 화면을 옮기지 않고 목록 데이터만 다시 불러올 때 쓴다.
+  const reloadDogs = () => setReloadKey((k) => k + 1)
+
   const backToList = () => {
-    setReloadKey((k) => k + 1)
+    reloadDogs()
     window.location.hash = '#/'
   }
 
@@ -187,7 +191,7 @@ function App() {
         </div>
       </header>
       {route.name === 'add' ? (
-        <DogForm mode="add" onDone={onAdded} onNotify={notify} />
+        <AddPage onAdded={onAdded} onRestored={reloadDogs} onNotify={notify} />
       ) : route.name === 'edit' ? (
         editingDog ? (
           <DogForm
