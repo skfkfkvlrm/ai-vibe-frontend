@@ -35,7 +35,8 @@ function App() {
   const submit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     if (!title.trim()) return
-    if (editingId !== null && !window.confirm(`"${title}" 노트를 수정할까요?`)) return
+    const action = editingId === null ? '추가' : '수정'
+    if (!window.confirm(`"${title}" 노트를 ${action}할까요?`)) return
     try {
       if (editingId === null) {
         await createNote({ title, content })
