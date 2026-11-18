@@ -1,4 +1,4 @@
-/* 라이트 값은 stock.skfkfkvlrm.kr 로그인 화면 CSS를 참고, 다크 값은 슬레이트 계열로 새로 정한 값 */
+/* 라이트 값은 stock.skfkfkvlrm.kr 로그인 화면 CSS를 참고, 다크 값은 브라우저 설정 화면 스크린샷에서 실측한 색(hover·포커스 등 일부는 파생) */
 :root {
   --bg-main: #f8f9fa;
   --bg-panel: #ffffff;
@@ -26,20 +26,20 @@
 /* OS 설정이 다크이고, 사용자가 라이트를 직접 고르지 않았을 때 */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg-main: #0f172a;
-    --bg-panel: #1e293b;
-    --bg-input: #0f172a;
-    --bg-hover: #334155;
-    --border: #334155;
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
-    --accent: #2563eb;
-    --accent-hover: #1d4ed8;
-    --focus-ring: #3b82f640;
+    --bg-main: #1d1e20;
+    --bg-panel: #282828;
+    --bg-input: #1d1e20;
+    --bg-hover: #333333;
+    --border: #3e3e3e;
+    --text-main: #ffffff;
+    --text-muted: #9aa0a6;
+    --accent: #275cf3;
+    --accent-hover: #1f4bd0;
+    --focus-ring: #275cf340;
     --danger: #f87171;
     --panel-shadow: 0 1px 3px #00000066, 0 1px 2px #00000040;
-    --btn-shadow: 0 4px 12px #2563eb40;
-    --btn-shadow-hover: 0 6px 16px #2563eb59;
+    --btn-shadow: 0 4px 12px #275cf340;
+    --btn-shadow-hover: 0 6px 16px #275cf359;
 
     color-scheme: dark;
   }
@@ -47,20 +47,20 @@
 
 /* 토글로 다크를 직접 고른 경우 */
 :root[data-theme='dark'] {
-  --bg-main: #0f172a;
-  --bg-panel: #1e293b;
-  --bg-input: #0f172a;
-  --bg-hover: #334155;
-  --border: #334155;
-  --text-main: #f1f5f9;
-  --text-muted: #94a3b8;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --focus-ring: #3b82f640;
+  --bg-main: #1d1e20;
+  --bg-panel: #282828;
+  --bg-input: #1d1e20;
+  --bg-hover: #333333;
+  --border: #3e3e3e;
+  --text-main: #ffffff;
+  --text-muted: #9aa0a6;
+  --accent: #275cf3;
+  --accent-hover: #1f4bd0;
+  --focus-ring: #275cf340;
   --danger: #f87171;
   --panel-shadow: 0 1px 3px #00000066, 0 1px 2px #00000040;
-  --btn-shadow: 0 4px 12px #2563eb40;
-  --btn-shadow-hover: 0 6px 16px #2563eb59;
+  --btn-shadow: 0 4px 12px #275cf340;
+  --btn-shadow-hover: 0 6px 16px #275cf359;
 
   color-scheme: dark;
 }
