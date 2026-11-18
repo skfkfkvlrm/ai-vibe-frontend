@@ -10,6 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': backend,
+      '/uploads': backend,
       '^/[^/]+\\.(jpg|jpeg|png)$': backend,
     },
   },

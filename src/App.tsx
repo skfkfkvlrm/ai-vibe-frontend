@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import './App.css'
+import AddDog from './AddDog'
 
 type Theme = 'light' | 'dark'
 const THEME_KEY = 'theme'
@@ -53,7 +54,14 @@ function loadCart(): Dog[] {
   return []
 }
 
-const isCartHash = () => window.location.hash === '#/cart'
+type Route = 'list' | 'cart' | 'add'
+
+function getRoute(): Route {
+  const hash = window.location.hash
+  if (hash === '#/cart') return 'cart'
+  if (hash === '#/add') return 'add'
+  return 'list'
+}
 
 function won(value: number | null): string {
   return value === null ? '-' : `${value.toLocaleString()}원`
@@ -64,10 +72,12 @@ function App() {
   const [status, setStatus] = useState<'loading' | 'done' | 'error'>('loading')
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
   const [cart, setCart] = useState<Dog[]>(loadCart)
-  const [inCart, setInCart] = useState(isCartHash)
+  const [route, setRoute] = useState<Route>(getRoute)
+  // 개를 추가한 뒤 목록을 다시 불러오기 위한 카운터
+  const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
-    const onHashChange = () => setInCart(isCartHash())
+    const onHashChange = () => setRoute(getRoute())
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
@@ -118,15 +128,25 @@ function App() {
         setStatus('error')
       })
     return () => controller.abort()
-  }, [])
+  }, [reloadKey])
+
+  // 추가를 마치면 목록을 다시 불러오고 목록 페이지로 이동한다.
+  const onAdded = () => {
+    setReloadKey((k) => k + 1)
+    window.location.hash = '#/'
+  }
 
   return (
     <main className="shop">
       <header className="shop-header">
         <h1>Dog Shop</h1>
         <div className="header-actions">
-          <a className="btn" href={inCart ? '#/' : '#/cart'}>
-            {inCart ? '목록' : `🛒 장바구니 (${cart.length})`}
+          {/* 임시 위치: 장바구니 버튼 왼쪽 */}
+          <a className="btn" href={route === 'add' ? '#/' : '#/add'}>
+            {route === 'add' ? '목록' : '＋ 개 추가'}
+          </a>
+          <a className="btn" href={route === 'cart' ? '#/' : '#/cart'}>
+            {route === 'cart' ? '목록' : `🛒 장바구니 (${cart.length})`}
           </a>
           <button
             type="button"
@@ -138,7 +158,9 @@ function App() {
           </button>
         </div>
       </header>
-      {inCart ? (
+      {route === 'add' ? (
+        <AddDog onDone={onAdded} />
+      ) : route === 'cart' ? (
         <section className="cart panel" aria-label="장바구니">
           <h2>장바구니</h2>
           {cart.length === 0 ? (
