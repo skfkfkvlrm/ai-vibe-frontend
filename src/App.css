@@ -69,11 +69,14 @@
 }
 
 .dog-card {
+  display: flex;
+  flex-direction: column;
   padding: 16px;
 }
 
 .dog-card img {
   display: block;
+  flex-shrink: 0;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
@@ -82,6 +85,8 @@
 }
 
 .dog-card ul {
+  /* 남는 높이를 차지해 구매 버튼이 항상 카드 맨 아래에 오게 한다 */
+  flex: 1;
   list-style: none;
   margin: 14px 0 0;
   padding: 0;
