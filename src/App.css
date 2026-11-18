@@ -1,0 +1,53 @@
+.notes {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  text-align: left;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.note-form input,
+.note-form textarea {
+  padding: 8px;
+  font: inherit;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.error {
+  color: #c0392b;
+}
+
+.note-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.note-list li {
+  border: 1px solid #8884;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.note-time {
+  display: block;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.note-list p {
+  margin: 4px 0 8px;
+  white-space: pre-wrap;
+}
