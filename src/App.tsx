@@ -54,7 +54,9 @@ function App() {
     setContent(note.content ?? '')
   }
 
-  const remove = async (id: number) => {
+  const remove = async (note: Note) => {
+    if (!window.confirm(`"${note.title}" 노트를 삭제할까요?`)) return
+    const id = note.id
     try {
       await deleteNote(id)
       if (editingId === id) reset()
@@ -105,7 +107,7 @@ function App() {
               <button type="button" onClick={() => edit(note)}>
                 수정
               </button>
-              <button type="button" onClick={() => remove(note.id)}>
+              <button type="button" onClick={() => remove(note)}>
                 삭제
               </button>
             </div>
