@@ -149,21 +149,23 @@ function App() {
       <ul className="note-list">
         {notes.map((note) => (
           <li key={note.id} className="panel">
-            <strong className="note-title">{note.title}</strong>
+            <div className="note-head">
+              <strong className="note-title">{note.title}</strong>
+              <div className="actions">
+                <button type="button" className="btn" onClick={() => edit(note)}>
+                  수정
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => remove(note)}
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
             <p className="note-content">{note.content}</p>
             <small className="note-time">{formatTime(note.updatedAt)}</small>
-            <div className="actions">
-              <button type="button" className="btn" onClick={() => edit(note)}>
-                수정
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => remove(note)}
-              >
-                삭제
-              </button>
-            </div>
           </li>
         ))}
         {notes.length === 0 && !error && <li className="empty panel">노트가 없습니다.</li>}
