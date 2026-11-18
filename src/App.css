@@ -1,0 +1,110 @@
+.shop {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.shop-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--panel-shadow);
+}
+
+.btn {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-panel);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn:hover {
+  background: var(--bg-hover);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 3열 그리드. 높이를 고정하고 넘치면 상하 스크롤 */
+.dog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-content: start;
+  height: min(1000px, 75vh);
+  padding: 4px;
+  overflow-y: auto;
+}
+
+.dog-card {
+  padding: 16px;
+}
+
+.dog-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.dog-card ul {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.dog-card li:last-child {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.dog-kind {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.dog-msg {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-muted);
+}
