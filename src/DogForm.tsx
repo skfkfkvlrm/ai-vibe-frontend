@@ -1,13 +1,20 @@
 import { useRef, useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
+import { imageUrl } from './dog'
+import type { Dog } from './dog'
 
 const MAX_IMAGE_BYTES = 3 * 1024 * 1024
 
 type ImageResult = { image: string; source?: string | null }
-type Busy = 'upload' | 'fetch' | 'submit' | null
+type Busy = 'upload' | 'fetch' | 'submit' | 'delete' | null
+
+// 추가 화면과 수정 화면이 같은 폼을 쓴다. 수정 화면만 현재 값과 삭제 버튼을 가진다.
+type Props =
+  | { mode: 'add'; onDone: (dog: Dog) => void }
+  | { mode: 'edit'; initial: Dog; onDone: (dog: Dog) => void; onDeleted: (id: number) => void }
 
 function failure(status: number): string {
-  if (status === 404) return '나무위키에서 해당 문서나 이미지를 찾지 못했습니다.'
+  if (status === 404) return '대상을 찾지 못했습니다. (이미 삭제되었거나 나무위키에 문서나 이미지가 없습니다.)'
   if (status === 502) return '외부 사이트 요청에 실패했습니다.'
   if (status === 400) return '입력값이나 이미지 형식(png, jpeg, webp / 3MB 이하)을 확인하세요.'
   return `요청에 실패했습니다. (HTTP ${status})`
@@ -33,17 +40,22 @@ async function request(url: string, init: RequestInit): Promise<Response> {
   return res
 }
 
-function AddDog({ onDone }: { onDone: () => void }) {
-  const [kind, setKind] = useState('')
-  const [price, setPrice] = useState('')
-  const [country, setCountry] = useState('')
-  const [height, setHeight] = useState('')
-  const [weight, setWeight] = useState('')
-  const [content, setContent] = useState('')
-  const [image, setImage] = useState<string | null>(null)
+function DogForm(props: Props) {
+  const initial = props.mode === 'edit' ? props.initial : undefined
+  const editing = props.mode === 'edit'
+
+  const [kind, setKind] = useState(initial?.kind ?? '')
+  const [price, setPrice] = useState(initial?.price?.toString() ?? '')
+  const [country, setCountry] = useState(initial?.country ?? '')
+  const [height, setHeight] = useState(initial?.height?.toString() ?? '')
+  const [weight, setWeight] = useState(initial?.weight?.toString() ?? '')
+  const [content, setContent] = useState(initial?.content ?? '')
+  // 수정 화면에서 이미지를 바꾸지 않으면 원래 값을 그대로 보내 이미지가 지워지지 않게 한다.
+  const [image, setImage] = useState<string | null>(initial?.image ?? null)
   const [source, setSource] = useState<string | null>(null)
   const [busy, setBusy] = useState<Busy>(null)
   const [error, setError] = useState('')
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
   const fileInput = useRef<HTMLInputElement>(null)
 
   const applyImage = (result: ImageResult) => {
@@ -110,8 +122,9 @@ function AddDog({ onDone }: { onDone: () => void }) {
     setBusy('submit')
     setError('')
     try {
-      await request('/api/add', {
-        method: 'POST',
+      // 수정은 PUT 전체 교체라 비운 선택 항목은 서버에서 지워진다. 추가는 POST.
+      const res = await request(props.mode === 'edit' ? `/api/update/${props.initial.id}` : '/api/add', {
+        method: props.mode === 'edit' ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           kind: kind.trim(),
@@ -123,16 +136,35 @@ function AddDog({ onDone }: { onDone: () => void }) {
           ...(image && { image }),
         }),
       })
-      onDone()
+      props.onDone((await res.json()) as Dog)
     } catch (err) {
       setError((err as Error).message)
       setBusy(null)
     }
   }
 
+  // soft delete. 성공하면 화면이 목록으로 바뀌므로 busy를 풀지 않는다.
+  const remove = async () => {
+    if (props.mode !== 'edit' || busy) return
+    setBusy('delete')
+    setError('')
+    try {
+      await request(`/api/delete/${props.initial.id}`, { method: 'DELETE' })
+      props.onDeleted(props.initial.id)
+    } catch (err) {
+      setError((err as Error).message)
+      setBusy(null)
+      setConfirmingDelete(false)
+    }
+  }
+
+  const title = editing ? '개 수정' : '개 추가'
+  const submitLabel =
+    busy === 'submit' ? (editing ? '저장하는 중...' : '추가하는 중...') : editing ? '수정 완료' : '추가하기'
+
   return (
-    <form className="add-form panel" onSubmit={submit} aria-label="개 추가">
-      <h2>개 추가</h2>
+    <form className="add-form panel" onSubmit={submit} aria-label={title}>
+      <h2>{title}</h2>
 
       <label className="field">
         <span>종류 *</span>
@@ -181,7 +213,7 @@ function AddDog({ onDone }: { onDone: () => void }) {
         <span>이미지</span>
         <div className="image-box">
           {image ? (
-            <img src={'/' + image} alt="미리보기" />
+            <img src={imageUrl(image)} alt="미리보기" />
           ) : (
             <p className="image-empty">이미지 없음</p>
           )}
@@ -225,14 +257,44 @@ function AddDog({ onDone }: { onDone: () => void }) {
 
       <div className="form-actions">
         <button type="submit" className="btn btn-buy" disabled={busy !== null}>
-          {busy === 'submit' ? '추가하는 중...' : '추가하기'}
+          {submitLabel}
         </button>
         <a className="btn" href="#/">
           취소
         </a>
       </div>
+
+      {props.mode === 'edit' && (
+        <div className="danger-zone">
+          {confirmingDelete ? (
+            <>
+              <span className="danger-text">정말 삭제할까요? 삭제한 개는 목록에서 사라집니다.</span>
+              <button type="button" className="btn btn-danger" disabled={busy !== null} onClick={remove}>
+                {busy === 'delete' ? '삭제하는 중...' : '정말 삭제'}
+              </button>
+              <button
+                type="button"
+                className="btn"
+                disabled={busy !== null}
+                onClick={() => setConfirmingDelete(false)}
+              >
+                취소
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-danger"
+              disabled={busy !== null}
+              onClick={() => setConfirmingDelete(true)}
+            >
+              삭제
+            </button>
+          )}
+        </div>
+      )}
     </form>
   )
 }
 
-export default AddDog
+export default DogForm

@@ -1,6 +1,8 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import './App.css'
-import AddDog from './AddDog'
+import DogForm from './DogForm'
+import { imageUrl, show } from './dog'
+import type { Dog } from './dog'
 
 type Theme = 'light' | 'dark'
 const THEME_KEY = 'theme'
@@ -14,28 +16,6 @@ function getInitialTheme(): Theme {
     // 저장소에 접근할 수 없으면 OS 설정을 사용한다.
   }
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
-type Dog = {
-  id: number
-  kind: string
-  price: number | null
-  image: string | null
-  country: string | null
-  height: number | null
-  weight: number | null
-  content: string | null
-  readcount: number
-}
-
-// DB 값이 'jindo.jpg' 또는 '/static/jindo.jpg' 여도 '/jindo.jpg'로 맞춘다.
-function imageUrl(image: string | null): string {
-  if (!image) return ''
-  return '/' + image.replace(/^\/?(static\/)?/, '')
-}
-
-function show(value: string | number | null, unit = ''): string {
-  return value === null || value === undefined || value === '' ? '-' : `${value}${unit}`
 }
 
 const CART_KEY = 'cart'
@@ -54,13 +34,15 @@ function loadCart(): Dog[] {
   return []
 }
 
-type Route = 'list' | 'cart' | 'add'
+type Route = { name: 'list' } | { name: 'cart' } | { name: 'add' } | { name: 'edit'; id: number }
 
 function getRoute(): Route {
   const hash = window.location.hash
-  if (hash === '#/cart') return 'cart'
-  if (hash === '#/add') return 'add'
-  return 'list'
+  if (hash === '#/cart') return { name: 'cart' }
+  if (hash === '#/add') return { name: 'add' }
+  const edit = /^#\/edit\/(\d+)$/.exec(hash)
+  if (edit) return { name: 'edit', id: Number(edit[1]) }
+  return { name: 'list' }
 }
 
 function won(value: number | null): string {
@@ -130,11 +112,33 @@ function App() {
     return () => controller.abort()
   }, [reloadKey])
 
-  // 추가를 마치면 목록을 다시 불러오고 목록 페이지로 이동한다.
-  const onAdded = () => {
+  const backToList = () => {
     setReloadKey((k) => k + 1)
     window.location.hash = '#/'
   }
+
+  // 추가를 마치면 목록을 다시 불러오고 목록 페이지로 이동한다.
+  const onAdded = () => backToList()
+
+  // 수정을 저장하면 목록과 장바구니의 같은 id를 서버가 돌려준 값으로 바꾸고 목록으로 돌아간다.
+  const onUpdated = (dog: Dog) => {
+    setDogs((prev) => prev.map((d) => (d.id === dog.id ? dog : d)))
+    setCart((prev) => prev.map((d) => (d.id === dog.id ? dog : d)))
+    backToList()
+  }
+
+  // 삭제(soft delete)하면 목록과 장바구니에서 같은 id를 빼고 목록으로 돌아간다.
+  const onDeleted = (id: number) => {
+    setDogs((prev) => prev.filter((d) => d.id !== id))
+    setCart((prev) => prev.filter((d) => d.id !== id))
+    backToList()
+  }
+
+  const openEdit = (id: number) => {
+    window.location.hash = `#/edit/${id}`
+  }
+
+  const editingDog = route.name === 'edit' ? dogs.find((d) => d.id === route.id) : undefined
 
   return (
     <main className="shop">
@@ -142,11 +146,11 @@ function App() {
         <h1>Dog Shop</h1>
         <div className="header-actions">
           {/* 임시 위치: 장바구니 버튼 왼쪽 */}
-          <a className="btn" href={route === 'add' ? '#/' : '#/add'}>
-            {route === 'add' ? '목록' : '＋ 개 추가'}
+          <a className="btn" href={route.name === 'add' ? '#/' : '#/add'}>
+            {route.name === 'add' ? '목록' : '＋ 개 추가'}
           </a>
-          <a className="btn" href={route === 'cart' ? '#/' : '#/cart'}>
-            {route === 'cart' ? '목록' : `🛒 장바구니 (${cart.length})`}
+          <a className="btn" href={route.name === 'cart' ? '#/' : '#/cart'}>
+            {route.name === 'cart' ? '목록' : `🛒 장바구니 (${cart.length})`}
           </a>
           <button
             type="button"
@@ -158,9 +162,26 @@ function App() {
           </button>
         </div>
       </header>
-      {route === 'add' ? (
-        <AddDog onDone={onAdded} />
-      ) : route === 'cart' ? (
+      {route.name === 'add' ? (
+        <DogForm mode="add" onDone={onAdded} />
+      ) : route.name === 'edit' ? (
+        editingDog ? (
+          <DogForm
+            key={editingDog.id}
+            mode="edit"
+            initial={editingDog}
+            onDone={onUpdated}
+            onDeleted={onDeleted}
+          />
+        ) : status === 'loading' ? (
+          <p className="dog-msg">불러오는 중...</p>
+        ) : (
+          <p className="dog-msg">
+            {status === 'error' ? '목록을 불러오지 못했습니다.' : '해당 개를 찾을 수 없습니다.'}{' '}
+            <a href="#/">목록으로</a>
+          </p>
+        )
+      ) : route.name === 'cart' ? (
         <section className="cart panel" aria-label="장바구니">
           <h2>장바구니</h2>
           {cart.length === 0 ? (
@@ -193,7 +214,21 @@ function App() {
           <p className="dog-msg">등록된 개가 없습니다.</p>
         )}
         {dogs.map((dog) => (
-          <article className="dog-card panel" key={dog.id}>
+          <article
+            className="dog-card panel"
+            key={dog.id}
+            role="link"
+            tabIndex={0}
+            aria-label={`${dog.kind} 수정`}
+            onClick={() => openEdit(dog.id)}
+            onKeyDown={(e) => {
+              // 안쪽 구매 버튼에서 올라온 키 입력은 무시한다.
+              if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault()
+                openEdit(dog.id)
+              }
+            }}
+          >
             <img src={imageUrl(dog.image)} alt={dog.kind} />
             <ul>
               <li className="dog-kind">{show(dog.kind)}</li>
@@ -202,7 +237,15 @@ function App() {
               <li>원산지: {show(dog.country)}</li>
               <li>{show(dog.content)}</li>
             </ul>
-            <button type="button" className="btn btn-buy" onClick={() => buy(dog)}>
+            <button
+              type="button"
+              className="btn btn-buy"
+              onClick={(e) => {
+                // 카드 클릭(수정 화면 이동)으로 번지지 않게 한다.
+                e.stopPropagation()
+                buy(dog)
+              }}
+            >
               {dog.price === null ? '구매' : `구매 · ${dog.price.toLocaleString()}원`}
             </button>
           </article>
