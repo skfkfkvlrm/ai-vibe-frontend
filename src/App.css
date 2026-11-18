@@ -1,21 +1,82 @@
 .notes {
-  max-width: 640px;
+  max-width: 560px;
   margin: 0 auto;
-  padding: 24px 16px;
-  text-align: left;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.notes-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--panel-shadow);
 }
 
 .note-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 20px;
+  padding: 24px;
 }
 
-.note-form input,
-.note-form textarea {
-  padding: 8px;
-  font: inherit;
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-main);
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--focus-ring);
 }
 
 .actions {
@@ -23,12 +84,55 @@
   gap: 8px;
 }
 
+.btn {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-panel);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.btn:hover {
+  background: var(--bg-hover);
+}
+
+.btn-danger {
+  color: var(--danger);
+}
+
+.btn-primary {
+  padding: 14px 16px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: var(--btn-shadow);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--btn-shadow-hover);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .error {
-  color: #c0392b;
+  margin: 0;
+  color: var(--danger);
 }
 
 .note-list {
   list-style: none;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -36,18 +140,28 @@
 }
 
 .note-list li {
-  border: 1px solid #8884;
-  border-radius: 6px;
-  padding: 12px;
+  padding: 20px;
+}
+
+.note-list li.empty {
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.note-title {
+  font-size: 1.05rem;
+  color: var(--text-main);
+}
+
+.note-content {
+  margin: 8px 0;
+  white-space: pre-wrap;
+  color: var(--text-main);
 }
 
 .note-time {
   display: block;
-  color: #888;
-  margin-bottom: 8px;
-}
-
-.note-list p {
-  margin: 4px 0 8px;
-  white-space: pre-wrap;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
