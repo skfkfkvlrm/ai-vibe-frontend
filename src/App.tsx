@@ -1,6 +1,9 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import './App.css'
+import DogCard from './DogCard'
 import DogForm from './DogForm'
+import Toast from './Toast'
+import type { Notify, ToastData } from './Toast'
 import { imageUrl, show } from './dog'
 import type { Dog } from './dog'
 
@@ -57,6 +60,20 @@ function App() {
   const [route, setRoute] = useState<Route>(getRoute)
   // 개를 추가한 뒤 목록을 다시 불러오기 위한 카운터
   const [reloadKey, setReloadKey] = useState(0)
+  // 우하단 알림. 앱 최상위에서 관리해 화면이 바뀌어도 3초 동안 유지된다.
+  const [toast, setToast] = useState<ToastData | null>(null)
+  const toastSeq = useRef(0)
+
+  const notify: Notify = (kind, text) => {
+    toastSeq.current += 1
+    setToast({ id: toastSeq.current, kind, text })
+  }
+
+  useEffect(() => {
+    if (!toast) return
+    const timer = window.setTimeout(() => setToast(null), 3000)
+    return () => window.clearTimeout(timer)
+  }, [toast])
 
   useEffect(() => {
     const onHashChange = () => setRoute(getRoute())
@@ -74,7 +91,9 @@ function App() {
 
   // 같은 개는 한 번만 담고, 담은 뒤 장바구니 페이지로 이동한다.
   const buy = (dog: Dog) => {
+    const alreadyInCart = cart.some((d) => d.id === dog.id)
     setCart((prev) => (prev.some((d) => d.id === dog.id) ? prev : [...prev, dog]))
+    notify('success', alreadyInCart ? '이미 장바구니에 있습니다.' : '장바구니에 담았습니다.')
     window.location.hash = '#/cart'
   }
 
@@ -118,12 +137,16 @@ function App() {
   }
 
   // 추가를 마치면 목록을 다시 불러오고 목록 페이지로 이동한다.
-  const onAdded = () => backToList()
+  const onAdded = () => {
+    notify('success', '추가했습니다.')
+    backToList()
+  }
 
   // 수정을 저장하면 목록과 장바구니의 같은 id를 서버가 돌려준 값으로 바꾸고 목록으로 돌아간다.
   const onUpdated = (dog: Dog) => {
     setDogs((prev) => prev.map((d) => (d.id === dog.id ? dog : d)))
     setCart((prev) => prev.map((d) => (d.id === dog.id ? dog : d)))
+    notify('success', '수정했습니다.')
     backToList()
   }
 
@@ -131,6 +154,7 @@ function App() {
   const onDeleted = (id: number) => {
     setDogs((prev) => prev.filter((d) => d.id !== id))
     setCart((prev) => prev.filter((d) => d.id !== id))
+    notify('success', '삭제했습니다.')
     backToList()
   }
 
@@ -163,7 +187,7 @@ function App() {
         </div>
       </header>
       {route.name === 'add' ? (
-        <DogForm mode="add" onDone={onAdded} />
+        <DogForm mode="add" onDone={onAdded} onNotify={notify} />
       ) : route.name === 'edit' ? (
         editingDog ? (
           <DogForm
@@ -172,6 +196,7 @@ function App() {
             initial={editingDog}
             onDone={onUpdated}
             onDeleted={onDeleted}
+            onNotify={notify}
           />
         ) : status === 'loading' ? (
           <p className="dog-msg">불러오는 중...</p>
@@ -214,44 +239,11 @@ function App() {
           <p className="dog-msg">등록된 개가 없습니다.</p>
         )}
         {dogs.map((dog) => (
-          <article
-            className="dog-card panel"
-            key={dog.id}
-            role="link"
-            tabIndex={0}
-            aria-label={`${dog.kind} 수정`}
-            onClick={() => openEdit(dog.id)}
-            onKeyDown={(e) => {
-              // 안쪽 구매 버튼에서 올라온 키 입력은 무시한다.
-              if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
-                e.preventDefault()
-                openEdit(dog.id)
-              }
-            }}
-          >
-            <img src={imageUrl(dog.image)} alt={dog.kind} />
-            <ul>
-              <li className="dog-kind">{show(dog.kind)}</li>
-              <li>키: {show(dog.height, 'cm')}</li>
-              <li>몸무게: {show(dog.weight, 'kg')}</li>
-              <li>원산지: {show(dog.country)}</li>
-              <li>{show(dog.content)}</li>
-            </ul>
-            <button
-              type="button"
-              className="btn btn-buy"
-              onClick={(e) => {
-                // 카드 클릭(수정 화면 이동)으로 번지지 않게 한다.
-                e.stopPropagation()
-                buy(dog)
-              }}
-            >
-              {dog.price === null ? '구매' : `구매 · ${dog.price.toLocaleString()}원`}
-            </button>
-          </article>
+          <DogCard key={dog.id} dog={dog} onOpen={openEdit} onBuy={buy} />
         ))}
       </div>
       )}
+      <Toast toast={toast} />
     </main>
   )
 }

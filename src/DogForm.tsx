@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
 import { imageUrl } from './dog'
 import type { Dog } from './dog'
+import type { Notify } from './Toast'
+import { useConfirm } from './useConfirm'
 
 const MAX_IMAGE_BYTES = 3 * 1024 * 1024
 
@@ -9,9 +11,16 @@ type ImageResult = { image: string; source?: string | null }
 type Busy = 'upload' | 'fetch' | 'submit' | 'delete' | null
 
 // 추가 화면과 수정 화면이 같은 폼을 쓴다. 수정 화면만 현재 값과 삭제 버튼을 가진다.
+// onNotify: 저장·삭제 실패를 화면 우하단 알림으로도 알린다(성공 알림은 App이 띄운다).
 type Props =
-  | { mode: 'add'; onDone: (dog: Dog) => void }
-  | { mode: 'edit'; initial: Dog; onDone: (dog: Dog) => void; onDeleted: (id: number) => void }
+  | { mode: 'add'; onDone: (dog: Dog) => void; onNotify: Notify }
+  | {
+      mode: 'edit'
+      initial: Dog
+      onDone: (dog: Dog) => void
+      onDeleted: (id: number) => void
+      onNotify: Notify
+    }
 
 function failure(status: number): string {
   if (status === 404) return '대상을 찾지 못했습니다. (이미 삭제되었거나 나무위키에 문서나 이미지가 없습니다.)'
@@ -55,7 +64,9 @@ function DogForm(props: Props) {
   const [source, setSource] = useState<string | null>(null)
   const [busy, setBusy] = useState<Busy>(null)
   const [error, setError] = useState('')
-  const [confirmingDelete, setConfirmingDelete] = useState(false)
+  // 저장(추가·수정)과 삭제는 2차 확인을 거친다. 5초 안에 누르지 않으면 원래 버튼으로 돌아간다.
+  const submitConfirm = useConfirm()
+  const deleteConfirm = useConfirm()
   const fileInput = useRef<HTMLInputElement>(null)
 
   const applyImage = (result: ImageResult) => {
@@ -114,10 +125,26 @@ function DogForm(props: Props) {
     const p = toNumber(price)
     const h = toNumber(height)
     const w = toNumber(weight)
-    if (kind.trim() === '') return setError('종류를 입력하세요.')
-    if (p === null || (p !== undefined && !Number.isInteger(p)))
-      return setError('가격은 0 이상의 정수로 입력하세요.')
-    if (h === null || w === null) return setError('키와 몸무게는 0 이상의 숫자로 입력하세요.')
+    const problem =
+      kind.trim() === ''
+        ? '종류를 입력하세요.'
+        : p === null || (p !== undefined && !Number.isInteger(p))
+          ? '가격은 0 이상의 정수로 입력하세요.'
+          : h === null || w === null
+            ? '키와 몸무게는 0 이상의 숫자로 입력하세요.'
+            : ''
+    if (problem) {
+      submitConfirm.disarm()
+      setError(problem)
+      return
+    }
+    // 1차 클릭은 확인 상태로만 바꾸고, 2차 클릭에서 최신 값을 다시 검증한 뒤 저장한다.
+    if (!submitConfirm.armed) {
+      setError('')
+      submitConfirm.arm()
+      return
+    }
+    submitConfirm.disarm()
 
     setBusy('submit')
     setError('')
@@ -139,6 +166,7 @@ function DogForm(props: Props) {
       props.onDone((await res.json()) as Dog)
     } catch (err) {
       setError((err as Error).message)
+      props.onNotify('error', `저장하지 못했습니다. ${(err as Error).message}`)
       setBusy(null)
     }
   }
@@ -153,14 +181,25 @@ function DogForm(props: Props) {
       props.onDeleted(props.initial.id)
     } catch (err) {
       setError((err as Error).message)
+      props.onNotify('error', `삭제하지 못했습니다. ${(err as Error).message}`)
       setBusy(null)
-      setConfirmingDelete(false)
+      deleteConfirm.disarm()
     }
   }
 
   const title = editing ? '개 수정' : '개 추가'
   const submitLabel =
-    busy === 'submit' ? (editing ? '저장하는 중...' : '추가하는 중...') : editing ? '수정 완료' : '추가하기'
+    busy === 'submit'
+      ? editing
+        ? '저장하는 중...'
+        : '추가하는 중...'
+      : submitConfirm.armed
+        ? editing
+          ? '정말 수정'
+          : '정말 추가'
+        : editing
+          ? '수정 완료'
+          : '추가하기'
 
   return (
     <form className="add-form panel" onSubmit={submit} aria-label={title}>
@@ -259,14 +298,21 @@ function DogForm(props: Props) {
         <button type="submit" className="btn btn-buy" disabled={busy !== null}>
           {submitLabel}
         </button>
-        <a className="btn" href="#/">
-          취소
-        </a>
+        {submitConfirm.armed ? (
+          // 확인 상태에서는 목록으로 나가는 링크 대신 확인만 해제하는 버튼을 보여 혼동을 막는다.
+          <button type="button" className="btn" onClick={submitConfirm.disarm}>
+            취소
+          </button>
+        ) : (
+          <a className="btn" href="#/">
+            취소
+          </a>
+        )}
       </div>
 
       {props.mode === 'edit' && (
         <div className="danger-zone">
-          {confirmingDelete ? (
+          {deleteConfirm.armed ? (
             <>
               <span className="danger-text">정말 삭제할까요? 삭제한 개는 목록에서 사라집니다.</span>
               <button type="button" className="btn btn-danger" disabled={busy !== null} onClick={remove}>
@@ -276,7 +322,7 @@ function DogForm(props: Props) {
                 type="button"
                 className="btn"
                 disabled={busy !== null}
-                onClick={() => setConfirmingDelete(false)}
+                onClick={deleteConfirm.disarm}
               >
                 취소
               </button>
@@ -286,7 +332,7 @@ function DogForm(props: Props) {
               type="button"
               className="btn btn-danger"
               disabled={busy !== null}
-              onClick={() => setConfirmingDelete(true)}
+              onClick={deleteConfirm.arm}
             >
               삭제
             </button>

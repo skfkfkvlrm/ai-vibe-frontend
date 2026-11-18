@@ -184,6 +184,45 @@ a.btn {
   color: #e5484d;
 }
 
+/* 구매 2차 확인: 평소 구매 버튼과 같은 높이의 두 버튼 한 줄 */
+.confirm-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.confirm-row .btn-buy {
+  flex: 1;
+  width: auto;
+  margin-top: 0;
+}
+
+/* 우하단 알림(3초 후 사라짐) */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  max-width: min(360px, calc(100vw - 40px));
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: var(--radius-md);
+  background: var(--bg-panel);
+  color: var(--text-main);
+  box-shadow: var(--panel-shadow);
+  font-size: 0.9rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.toast-success {
+  border-left-color: #30a46c;
+}
+
+.toast-error {
+  border-left-color: #e5484d;
+}
+
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
