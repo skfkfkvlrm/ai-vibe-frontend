@@ -96,6 +96,63 @@
   font-size: 0.9rem;
 }
 
+a.btn {
+  text-decoration: none;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cart {
+  padding: 20px;
+}
+
+.cart h2 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+  color: var(--text-main);
+}
+
+.cart-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cart-list li {
+  display: grid;
+  grid-template-columns: 72px 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+}
+
+.cart-list img {
+  width: 72px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.cart-total {
+  margin: 16px 0 0;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.btn-buy {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  font-weight: 700;
+}
+
 .dog-kind {
   font-size: 1.05rem;
   font-weight: 700;
