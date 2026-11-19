@@ -1,3 +1,6 @@
+import { AUTH_EXPIRED_EVENT } from './auth/events'
+import { getToken } from './auth/token'
+
 export interface Product {
   id: number
   name: string
@@ -9,8 +12,13 @@ export interface Product {
 }
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
+  // 로그인 상태면 토큰을 붙이고, 토큰을 보냈는데 401이 오면(만료·무효) 로그아웃 처리를 요청한다.
+  const token = getToken()
+  const headers = new Headers(init?.headers)
+  if (token) headers.set('Authorization', `Bearer ${token}`)
+  const res = await fetch(url, { ...init, headers })
   if (!res.ok) {
+    if (res.status === 401 && token) window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT))
     let message = `HTTP ${res.status}`
     try {
       const body = await res.json()
