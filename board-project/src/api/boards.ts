@@ -23,3 +23,6 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 
 export const listBoards = (signal?: AbortSignal) =>
   request<Board[]>(BASE, { signal })
+
+/** 단건 조회. 호출될 때마다 서버의 board_readcount가 1 증가한다. */
+export const getBoard = (id: number) => request<Board>(`${BASE}/${id}`)
