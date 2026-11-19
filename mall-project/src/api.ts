@@ -19,7 +19,7 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, { ...init, headers })
   if (!res.ok) {
     if (res.status === 401 && token) window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT))
-    let message = `HTTP ${res.status}`
+    let message = res.status === 403 ? '관리자만 할 수 있는 작업입니다.' : `HTTP ${res.status}`
     try {
       const body = await res.json()
       if (body?.message) message = body.message

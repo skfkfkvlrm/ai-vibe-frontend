@@ -2,6 +2,7 @@ import { Link, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthProvider'
 import LoginPage from './auth/LoginPage'
 import SignupPage from './auth/SignupPage'
+import AdminRoute from './auth/AdminRoute'
 import { useAuth } from './auth/useAuth'
 import MyPage from './pages/MyPage'
 import ProductDetail from './pages/ProductDetail'
@@ -45,9 +46,23 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/products/new" element={<ProductForm />} />
+          <Route
+            path="/products/new"
+            element={
+              <AdminRoute>
+                <ProductForm />
+              </AdminRoute>
+            }
+          />
           <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/products/:id/edit" element={<ProductForm />} />
+          <Route
+            path="/products/:id/edit"
+            element={
+              <AdminRoute>
+                <ProductForm />
+              </AdminRoute>
+            }
+          />
           <Route path="*" element={<p>페이지를 찾을 수 없습니다. <Link to="/">목록으로</Link></p>} />
         </Routes>
       </main>

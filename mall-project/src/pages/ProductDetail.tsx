@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getProduct, picUrl, won, type Product } from '../api'
+import { isAdmin } from '../auth/isAdmin'
+import { useAuth } from '../auth/useAuth'
 
 export default function ProductDetail() {
+  const { member } = useAuth()
   const { id = '' } = useParams()
   const [product, setProduct] = useState<Product | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -34,9 +37,11 @@ export default function ProductDetail() {
     <>
       <div className="page-head">
         <h1>{product.name}</h1>
-        <Link to={`/products/${product.id}/edit`} className="btn primary">
-          수정
-        </Link>
+        {isAdmin(member) && (
+          <Link to={`/products/${product.id}/edit`} className="btn primary">
+            수정
+          </Link>
+        )}
       </div>
       <div className="detail">
         <div className="detail-image">

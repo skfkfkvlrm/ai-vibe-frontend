@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getProducts, picUrl, won, type Product } from '../api'
+import { isAdmin } from '../auth/isAdmin'
+import { useAuth } from '../auth/useAuth'
 
 export default function ProductList() {
+  const { member } = useAuth()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -25,9 +28,11 @@ export default function ProductList() {
     <>
       <div className="page-head">
         <h1>제품 목록</h1>
-        <Link to="/products/new" className="btn primary">
-          새 제품 등록
-        </Link>
+        {isAdmin(member) && (
+          <Link to="/products/new" className="btn primary">
+            새 제품 등록
+          </Link>
+        )}
       </div>
       {loading && <p>불러오는 중...</p>}
       {error && <p className="error">목록을 불러오지 못했습니다: {error}</p>}
