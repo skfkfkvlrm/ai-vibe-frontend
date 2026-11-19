@@ -31,11 +31,45 @@ const BASE = '/api/boards'
 
 const JSON_HEADERS = { 'Content-Type': 'application/json' }
 
-export const listBoards = (signal?: AbortSignal) =>
-  request<Board[]>(BASE, { signal })
+/** 검색 조건: 제목+내용 또는 작성자 */
+export type SearchField = 'TITLE_CONTENT' | 'AUTHOR'
 
-/** 단건 조회. 호출될 때마다 서버의 board_readcount가 1 증가한다. */
-export const getBoard = (id: number) => request<Board>(`${BASE}/${id}`)
+export const PAGE_SIZES = [10, 20, 50] as const
+export type PageSize = (typeof PAGE_SIZES)[number]
+
+/** 서버가 허용하는 검색어 최대 길이 */
+export const MAX_QUERY_LENGTH = 100
+
+export interface ListParams {
+  /** 0부터 시작 */
+  page: number
+  size: PageSize
+  field: SearchField
+  /** 빈 문자열이면 검색하지 않는다 */
+  q: string
+}
+
+/** 목록 한 페이지. items는 해당 페이지의 원글과 그 답글이며, 건수·페이지 수는 원글 기준이다. */
+export interface BoardPage {
+  items: Board[]
+  page: number
+  size: number
+  total_elements: number
+  total_pages: number
+}
+
+export const listBoards = (params: ListParams, signal?: AbortSignal) => {
+  const query = new URLSearchParams({ page: String(params.page), size: String(params.size) })
+  if (params.q) {
+    query.set('field', params.field)
+    query.set('q', params.q)
+  }
+  return request<BoardPage>(`${BASE}?${query}`, { signal })
+}
+
+/** 단건 조회. count가 true(기본)이면 서버의 board_readcount가 1 증가하고, false이면 올리지 않는다. */
+export const getBoard = (id: number, options?: { count?: boolean }) =>
+  request<Board>(`${BASE}/${id}${options?.count === false ? '?count=false' : ''}`)
 
 export const createBoard = (input: BoardInput) =>
   request<Board>(BASE, {

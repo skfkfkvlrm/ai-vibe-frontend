@@ -253,6 +253,36 @@
   margin: 8px 0;
 }
 
+.board-search {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.board-search input[type='search'] {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+
+.board-summary {
+  margin: 4px 0;
+  font-size: 0.9em;
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.pager button[aria-current='page'] {
+  font-weight: bold;
+}
+
 .board-form,
 .board-delete-confirm {
   margin: 8px 0;
