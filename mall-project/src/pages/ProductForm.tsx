@@ -10,6 +10,8 @@ export default function ProductForm() {
   const [current, setCurrent] = useState<Product | null>(null)
   const [loading, setLoading] = useState(isEdit)
   const [busy, setBusy] = useState(false)
+  // 2차 확인: 등록/저장 버튼을 누르면 true가 되어 [취소][확인] 버튼으로 바뀐다.
+  const [confirming, setConfirming] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [v] = useState(() => Date.now())
 
@@ -30,6 +32,11 @@ export default function ProductForm() {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    // 첫 제출(브라우저 입력 검증 통과 후)은 확인 단계로만 넘기고, 확인 버튼의 제출에서 실제로 저장한다.
+    if (!confirming) {
+      setConfirming(true)
+      return
+    }
     const form = new FormData(e.currentTarget)
     // 파일을 고르지 않은 항목은 보내지 않아 서버가 기존 이미지를 유지하게 한다.
     for (const key of ['pic_s', 'pic_l']) {
@@ -44,6 +51,7 @@ export default function ProductForm() {
     } catch (err) {
       setError(err instanceof Error ? err.message : '저장하지 못했습니다')
       setBusy(false)
+      setConfirming(false)
     }
   }
 
@@ -73,7 +81,8 @@ export default function ProductForm() {
   return (
     <>
       <h1>{isEdit ? '제품 수정' : '새 제품 등록'}</h1>
-      <form className="product-form" onSubmit={onSubmit}>
+      {/* 입력이 바뀌면 확인 단계를 해제해, 확인한 내용과 저장되는 내용이 달라지지 않게 한다. */}
+      <form className="product-form" onSubmit={onSubmit} onChange={() => setConfirming(false)}>
         <label>
           제품명
           <input name="name" required defaultValue={current?.name} />
@@ -102,19 +111,32 @@ export default function ProductForm() {
         </label>
         {isEdit && <p className="hint">이미지를 선택하지 않으면 기존 이미지가 유지됩니다.</p>}
         {error && <p className="error">{error}</p>}
-        <div className="actions">
-          <button type="submit" className="btn primary" disabled={busy}>
-            {isEdit ? '저장' : '등록'}
-          </button>
-          <Link to={isEdit ? `/products/${id}` : '/'} className="btn">
-            취소
-          </Link>
-          {isEdit && (
-            <button type="button" className="btn danger" onClick={onDelete} disabled={busy}>
-              삭제
+        {confirming ? (
+          <div className="actions confirm" role="group" aria-label="확인">
+            <span className="confirm-msg">이 내용으로 {isEdit ? '저장' : '등록'}할까요?</span>
+            {/* 더블클릭이 확인으로 이어지지 않도록, 방금 누른 버튼 자리에는 취소를 둔다. */}
+            <button key="cancel" type="button" className="btn" onClick={() => setConfirming(false)} disabled={busy}>
+              취소
             </button>
-          )}
-        </div>
+            <button key="ok" type="submit" className="btn primary" disabled={busy}>
+              확인
+            </button>
+          </div>
+        ) : (
+          <div className="actions">
+            <button key="submit" type="submit" className="btn primary" disabled={busy}>
+              {isEdit ? '저장' : '등록'}
+            </button>
+            <Link to={isEdit ? `/products/${id}` : '/'} className="btn">
+              취소
+            </Link>
+            {isEdit && (
+              <button type="button" className="btn danger" onClick={onDelete} disabled={busy}>
+                삭제
+              </button>
+            )}
+          </div>
+        )}
       </form>
     </>
   )

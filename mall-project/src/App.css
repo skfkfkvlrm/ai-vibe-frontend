@@ -84,7 +84,13 @@
   }
   .actions {
     display: flex;
+    align-items: center;
     gap: 8px;
+  }
+  .confirm-msg {
+    margin-right: auto;
+    color: var(--text-h);
+    font-weight: 600;
   }
 }
 
