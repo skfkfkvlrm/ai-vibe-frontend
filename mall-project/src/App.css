@@ -9,6 +9,127 @@
   color: #c0392b;
 }
 
+.site-head {
+  font-weight: 700;
+  margin-bottom: 8px;
+
+  a {
+    color: var(--text-h);
+    text-decoration: none;
+  }
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-block;
+  font: inherit;
+  font-size: 15px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-h);
+  text-decoration: none;
+  cursor: pointer;
+
+  &.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  &.danger {
+    margin-left: auto;
+    color: #c0392b;
+    border-color: #c0392b;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 520px;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 15px;
+  }
+  input:not([type='file']),
+  textarea {
+    font: inherit;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .preview {
+    width: 160px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .hint {
+    margin: 0;
+    font-size: 14px;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+.detail {
+  display: flex;
+  gap: 28px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.detail-image {
+  flex: 1 1 320px;
+  max-width: 480px;
+  border-radius: 10px;
+  background: var(--code-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    display: block;
+  }
+}
+
+.detail-info {
+  flex: 1 1 260px;
+  margin: 0;
+
+  dt {
+    font-size: 14px;
+    margin-top: 12px;
+  }
+  dd {
+    margin: 2px 0 0;
+    color: var(--text-h);
+  }
+  .price {
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
+
 .product-grid {
   list-style: none;
   padding: 0;
@@ -19,6 +140,8 @@
 }
 
 .product-card {
+  color: inherit;
+  text-decoration: none;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px;
