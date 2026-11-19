@@ -2,7 +2,9 @@ import { Link, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthProvider'
 import LoginPage from './auth/LoginPage'
 import SignupPage from './auth/SignupPage'
+import MembersPage from './admin/MembersPage'
 import AdminRoute from './auth/AdminRoute'
+import { isAdmin } from './auth/isAdmin'
 import { useAuth } from './auth/useAuth'
 import MyPage from './pages/MyPage'
 import ProductDetail from './pages/ProductDetail'
@@ -19,6 +21,7 @@ function SiteHeader() {
         <nav className="auth-nav">
           {member ? (
             <>
+              {isAdmin(member) && <Link to="/admin/members">회원 관리</Link>}
               <Link to="/mypage">{member.name}님</Link>
               <button type="button" className="btn" onClick={logout}>
                 로그아웃
@@ -51,6 +54,14 @@ function App() {
             element={
               <AdminRoute>
                 <ProductForm />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/members"
+            element={
+              <AdminRoute>
+                <MembersPage />
               </AdminRoute>
             }
           />
