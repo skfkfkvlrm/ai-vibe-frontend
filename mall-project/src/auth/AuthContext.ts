@@ -8,6 +8,10 @@ export interface AuthValue {
   ready: boolean
   login: (loginId: string, password: string) => Promise<void>
   logout: () => void
+  /** 내 정보 수정 결과로 회원 정보만 갱신한다. */
+  applyMember: (member: Member) => void
+  /** 비밀번호를 바꾸고 받은 새 토큰으로 현재 로그인을 이어간다(이전 토큰은 서버에서 무효). */
+  applyToken: (token: string) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthValue | null>(null)

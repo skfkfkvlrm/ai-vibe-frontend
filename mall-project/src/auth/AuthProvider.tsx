@@ -57,6 +57,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         clearToken()
         setMember(null)
       },
+      applyMember: (m) => setMember(m),
+      applyToken: async (token) => {
+        const m = await me(token)
+        setToken(token)
+        setMember(m)
+      },
     }),
     [member, ready],
   )

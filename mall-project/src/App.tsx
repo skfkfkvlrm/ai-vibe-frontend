@@ -3,6 +3,7 @@ import { AuthProvider } from './auth/AuthProvider'
 import LoginPage from './auth/LoginPage'
 import SignupPage from './auth/SignupPage'
 import { useAuth } from './auth/useAuth'
+import MyPage from './pages/MyPage'
 import ProductDetail from './pages/ProductDetail'
 import ProductForm from './pages/ProductForm'
 import ProductList from './pages/ProductList'
@@ -17,7 +18,7 @@ function SiteHeader() {
         <nav className="auth-nav">
           {member ? (
             <>
-              <span>{member.name}님</span>
+              <Link to="/mypage">{member.name}님</Link>
               <button type="button" className="btn" onClick={logout}>
                 로그아웃
               </button>
@@ -43,6 +44,7 @@ function App() {
           <Route path="/" element={<ProductList />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/mypage" element={<MyPage />} />
           <Route path="/products/new" element={<ProductForm />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/products/:id/edit" element={<ProductForm />} />
