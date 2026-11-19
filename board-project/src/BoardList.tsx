@@ -72,6 +72,12 @@ function BoardList() {
   if (error) return <p role="alert">오류: {error}</p>
   if (boards.length === 0) return <p>게시글이 없습니다.</p>
 
+  // 그룹(re_ref)별 답글 수. 답글이 있는 원글만 펼칠 수 있다.
+  const replyCounts = new Map<number, number>()
+  for (const b of boards) {
+    if (b.re_lev > 0) replyCounts.set(b.re_ref, (replyCounts.get(b.re_ref) ?? 0) + 1)
+  }
+
   const opened = boards.find((b) => b.board_num === openId)
   // 원글을 펼치면 같은 그룹(re_ref)의 답글 전체를 보여준다.
   const replies =
@@ -93,20 +99,29 @@ function BoardList() {
       <tbody>
         {boards.map((b) => {
           const isOpen = b.board_num === openId
+          const replyCount = b.re_lev === 0 ? (replyCounts.get(b.re_ref) ?? 0) : 0
+          const expandable = replyCount > 0
           return (
             <Fragment key={b.board_num}>
               <tr className={isOpen ? 'board-row open' : 'board-row'}>
                 <td>{b.board_num}</td>
                 <td style={{ paddingLeft: `${b.re_lev * 16}px` }}>
-                  <button
-                    type="button"
-                    className="board-toggle"
-                    aria-expanded={isOpen}
-                    onClick={() => toggle(b.board_num)}
-                  >
-                    {b.re_lev > 0 ? '↳ ' : ''}
-                    {b.board_subject}
-                  </button>
+                  {expandable ? (
+                    <button
+                      type="button"
+                      className="board-toggle"
+                      aria-expanded={isOpen}
+                      onClick={() => toggle(b.board_num)}
+                    >
+                      {isOpen ? '▾ ' : '▸ '}
+                      {b.board_subject} ({replyCount})
+                    </button>
+                  ) : (
+                    <span>
+                      {b.re_lev > 0 ? '↳ ' : ''}
+                      {b.board_subject}
+                    </span>
+                  )}
                 </td>
                 <td>{b.board_name}</td>
                 <td>{b.board_readcount}</td>
