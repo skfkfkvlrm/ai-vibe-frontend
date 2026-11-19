@@ -3,11 +3,10 @@ import { Navigate } from 'react-router-dom'
 import {
   adminErrorMessage,
   listDeletedBoards,
-  listMembers,
   restoreBoard,
   type DeletedBoard,
 } from './api/admin'
-import type { Member } from './api/auth'
+import AdminMembers from './AdminMembers'
 import { useAuth } from './auth/useAuth'
 import Loading from './Loading'
 import './App.css'
@@ -117,59 +116,6 @@ function DeletedBoards() {
   )
 }
 
-/** 회원 목록(비밀번호 제외). */
-function MemberList() {
-  const [members, setMembers] = useState<Member[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    listMembers(controller.signal)
-      .then((data) => {
-        setMembers(data)
-        setError(null)
-      })
-      .catch((e: unknown) => {
-        if (e instanceof DOMException && e.name === 'AbortError') return
-        setError(adminErrorMessage(e))
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false)
-      })
-    return () => controller.abort()
-  }, [])
-
-  if (loading) return <Loading />
-  if (error) return <p role="alert">오류: {error}</p>
-  if (members.length === 0) return <p>회원이 없습니다.</p>
-
-  return (
-    <table className="board-table">
-      <thead>
-        <tr>
-          <th>아이디</th>
-          <th>이름</th>
-          <th>이메일</th>
-          <th>권한</th>
-          <th>가입일</th>
-        </tr>
-      </thead>
-      <tbody>
-        {members.map((m) => (
-          <tr key={m.member_id}>
-            <td>{m.login_id}</td>
-            <td>{m.name}</td>
-            <td>{m.email}</td>
-            <td>{m.role}</td>
-            <td>{formatDate(m.created_at)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}
-
 /** 관리자 화면. 화면 접근 제한은 편의일 뿐이며 실제 권한은 서버가 DB의 role로 판정한다. */
 function AdminPage() {
   const { member, ready } = useAuth()
@@ -199,7 +145,7 @@ function AdminPage() {
           회원 목록
         </button>
       </div>
-      {tab === 'deleted' ? <DeletedBoards /> : <MemberList />}
+      {tab === 'deleted' ? <DeletedBoards /> : <AdminMembers />}
     </section>
   )
 }

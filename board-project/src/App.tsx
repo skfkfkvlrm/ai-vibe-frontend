@@ -3,6 +3,8 @@ import AdminPage from './AdminPage'
 import { useAuth } from './auth/useAuth'
 import BoardList from './BoardList'
 import LoginPage from './LoginPage'
+import MyPage from './MyPage'
+import ResetNoticeDialog from './ResetNoticeDialog'
 import SignupPage from './SignupPage'
 
 function App() {
@@ -20,7 +22,9 @@ function App() {
           {ready &&
             (member ? (
               <>
-                <span>{member.name}님</span>
+                <Link className="button-link" to="/mypage" title="내 정보">
+                  {member.name}님
+                </Link>
                 {member.role === 'ADMIN' && (
                   // 관리자 화면에서는 같은 자리가 게시글 목록으로 돌아가는 버튼이 된다(SPA 라우팅, 새로고침 없음).
                   <Link className="button-link" to={onAdminPage ? '/boards' : '/admin'}>
@@ -49,7 +53,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
+      <ResetNoticeDialog />
     </main>
   )
 }

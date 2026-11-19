@@ -437,3 +437,83 @@
 .board-table details summary {
   cursor: pointer;
 }
+
+.mypage-section {
+  max-width: 640px;
+  margin: 16px auto;
+  text-align: left;
+}
+
+.mypage-section.auth-form {
+  max-width: 640px;
+}
+
+.auth-form-label {
+  flex: 0 0 6.5em;
+}
+
+.mypage-agree {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.modal {
+  max-width: 420px;
+  margin: 16px;
+  padding: 20px;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  text-align: left;
+}
+
+.modal h2 {
+  margin: 0 0 8px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.admin-issued {
+  margin: 8px 0;
+  padding: 12px;
+  border: 2px solid #b45309;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.admin-issued code {
+  padding: 2px 6px;
+  font-size: 1.1em;
+  user-select: all;
+}
+
+.admin-ban-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+}
+
+.admin-ban-types label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

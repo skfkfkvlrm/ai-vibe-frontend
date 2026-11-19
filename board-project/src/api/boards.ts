@@ -29,10 +29,43 @@ export interface BoardInput {
 
 export class ApiError extends Error {
   status: number
+  /** 오류 응답 본문(JSON이면 파싱한 값). 밴 안내(code: 'BANNED') 등을 읽는 데 쓴다. */
+  body?: unknown
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, body?: unknown) {
     super(message)
     this.status = status
+    this.body = body
+  }
+}
+
+/** 밴 중인 회원에게 서버가 내려주는 안내. until이 null이면 영구 밴이다. */
+export interface BanInfo {
+  code: 'BANNED'
+  reason: string | null
+  until: string | null
+  permanent: boolean
+}
+
+export function asBanInfo(body: unknown): BanInfo | null {
+  if (typeof body === 'object' && body !== null && (body as { code?: unknown }).code === 'BANNED') {
+    return body as BanInfo
+  }
+  return null
+}
+
+export function banMessage(info: BanInfo): string {
+  const until = info.permanent || !info.until ? '영구' : info.until.slice(0, 16).replace('T', ' ') + '까지'
+  const reason = info.reason ? ` 사유: ${info.reason}.` : ''
+  return `이용이 제한된 계정입니다.${reason} 제한 기간: ${until}`
+}
+
+/** 오류 응답 본문을 JSON으로 읽는다. 본문이 없거나 JSON이 아니면 undefined. */
+export async function readErrorBody(res: Response): Promise<unknown> {
+  try {
+    return await res.json()
+  } catch {
+    return undefined
   }
 }
 
@@ -51,7 +84,7 @@ export async function request<T>(url: string, init?: RequestInit): Promise<T> {
     if (res.status === 401 && token) {
       window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT))
     }
-    throw new ApiError(res.status, `${res.status} ${res.statusText}`)
+    throw new ApiError(res.status, `${res.status} ${res.statusText}`, await readErrorBody(res))
   }
   return res.status === 204 ? (undefined as T) : ((await res.json()) as T)
 }
@@ -97,7 +130,10 @@ export const deleteBoard = (id: number, pass?: string) =>
 export function errorMessage(e: unknown): string {
   if (e instanceof ApiError) {
     if (e.status === 401) return '로그인이 필요하거나 로그인이 만료되었습니다.'
-    if (e.status === 403) return '권한이 없거나 비밀번호가 일치하지 않습니다.'
+    if (e.status === 403) {
+      const ban = asBanInfo(e.body)
+      return ban ? banMessage(ban) : '권한이 없거나 비밀번호가 일치하지 않습니다.'
+    }
     if (e.status === 404) return '이미 삭제되었거나 존재하지 않는 글입니다.'
     if (e.status === 400) return '입력값을 확인해 주세요.'
   }

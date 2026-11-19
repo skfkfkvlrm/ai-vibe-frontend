@@ -1,4 +1,4 @@
-import { ApiError } from './boards'
+import { ApiError, asBanInfo, banMessage, readErrorBody } from './boards'
 
 export interface Member {
   member_id: number
@@ -7,6 +7,8 @@ export interface Member {
   email: string
   role: string
   created_at: string
+  /** 관리자가 임시 비밀번호로 초기화한 뒤 아직 바꾸지 않았으면 true */
+  password_reset_pending: boolean
 }
 
 export interface SignupInput {
@@ -27,7 +29,7 @@ const BASE = '/api/auth'
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init)
   if (!res.ok) {
-    throw new ApiError(res.status, `${res.status} ${res.statusText}`)
+    throw new ApiError(res.status, `${res.status} ${res.statusText}`, await readErrorBody(res))
   }
   return (await res.json()) as T
 }
@@ -53,6 +55,10 @@ export const me = (token: string) =>
 
 export function authErrorMessage(e: unknown, kind: 'login' | 'signup'): string {
   if (e instanceof ApiError) {
+    if (kind === 'login' && e.status === 403) {
+      const ban = asBanInfo(e.body)
+      if (ban) return banMessage(ban)
+    }
     if (kind === 'login' && e.status === 401) return '아이디 또는 비밀번호가 올바르지 않습니다.'
     if (kind === 'signup' && e.status === 409) return '이미 사용 중인 아이디 또는 이메일입니다.'
     if (e.status === 400) return '입력값을 확인해 주세요.'

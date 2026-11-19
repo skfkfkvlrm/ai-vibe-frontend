@@ -41,7 +41,7 @@ function LoginPage() {
     <form className="auth-form" onSubmit={handleSubmit}>
       <h2>로그인</h2>
       {registered && <p role="status">가입이 완료되었습니다. 로그인해 주세요.</p>}
-      {expired && <p role="alert">로그인이 만료되었습니다. 다시 로그인해 주세요.</p>}
+      {expired && <p role="alert">로그인 정보가 변경되었거나 만료되었습니다. 다시 로그인해 주세요.</p>}
       <div className="auth-form-row">
         <label htmlFor={`${uid}-id`}>아이디</label>
         <input
