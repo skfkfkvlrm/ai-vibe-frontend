@@ -1,4 +1,4 @@
-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import AdminPage from './AdminPage'
 import { useAuth } from './auth/useAuth'
 import BoardList from './BoardList'
@@ -7,6 +7,8 @@ import SignupPage from './SignupPage'
 
 function App() {
   const { member, ready, logout } = useAuth()
+  const { pathname } = useLocation()
+  const onAdminPage = pathname === '/admin' || pathname.startsWith('/admin/')
 
   return (
     <main>
@@ -20,8 +22,9 @@ function App() {
               <>
                 <span>{member.name}님</span>
                 {member.role === 'ADMIN' && (
-                  <Link className="button-link" to="/admin">
-                    관리자
+                  // 관리자 화면에서는 같은 자리가 게시글 목록으로 돌아가는 버튼이 된다(SPA 라우팅, 새로고침 없음).
+                  <Link className="button-link" to={onAdminPage ? '/boards' : '/admin'}>
+                    {onAdminPage ? '게시글 목록' : '관리자'}
                   </Link>
                 )}
                 <button type="button" onClick={logout}>
