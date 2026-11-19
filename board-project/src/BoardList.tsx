@@ -78,12 +78,13 @@ function BoardList() {
     if (b.re_lev > 0) replyCounts.set(b.re_ref, (replyCounts.get(b.re_ref) ?? 0) + 1)
   }
 
-  const opened = boards.find((b) => b.board_num === openId)
+  // 목록에는 원글만 표시하고, 답글은 원글을 펼쳤을 때만 보여준다.
+  const topLevel = boards.filter((b) => b.re_lev === 0)
+  const opened = topLevel.find((b) => b.board_num === openId)
   // 원글을 펼치면 같은 그룹(re_ref)의 답글 전체를 보여준다.
-  const replies =
-    opened && opened.re_lev === 0
-      ? boards.filter((b) => b.re_ref === opened.re_ref && b.re_lev > 0)
-      : []
+  const replies = opened
+    ? boards.filter((b) => b.re_ref === opened.re_ref && b.re_lev > 0)
+    : []
 
   return (
     <table className="board-table">
@@ -96,14 +97,14 @@ function BoardList() {
         </tr>
       </thead>
       <tbody>
-        {boards.map((b) => {
+        {topLevel.map((b) => {
           const isOpen = b.board_num === openId
-          const replyCount = b.re_lev === 0 ? (replyCounts.get(b.re_ref) ?? 0) : 0
+          const replyCount = replyCounts.get(b.re_ref) ?? 0
           const expandable = replyCount > 0
           return (
             <Fragment key={b.board_num}>
               <tr className={isOpen ? 'board-row open' : 'board-row'}>
-                <td style={{ paddingLeft: `${b.re_lev * 16}px` }}>
+                <td>
                   {expandable ? (
                     <button
                       type="button"
@@ -115,10 +116,7 @@ function BoardList() {
                       {b.board_subject} ({replyCount})
                     </button>
                   ) : (
-                    <span>
-                      {b.re_lev > 0 ? '↳ ' : ''}
-                      {b.board_subject}
-                    </span>
+                    <span>{b.board_subject}</span>
                   )}
                 </td>
                 <td>{b.board_name}</td>
