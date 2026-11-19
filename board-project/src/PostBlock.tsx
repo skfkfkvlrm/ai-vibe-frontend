@@ -34,17 +34,19 @@ function PostBlock({ board, content, active, onActive, onEdit, onReply, onDelete
           </span>
         </div>
       )}
-      <div className="board-content">{content || '(본문 없음)'}</div>
-      <div className="post-actions">
-        <button type="button" aria-pressed={mine === 'edit'} onClick={() => toggle('edit')}>
-          수정
-        </button>
-        <button type="button" aria-pressed={mine === 'delete'} onClick={() => toggle('delete')}>
-          삭제
-        </button>
-        <button type="button" aria-pressed={mine === 'reply'} onClick={() => toggle('reply')}>
-          답글
-        </button>
+      <div className="post-body">
+        <div className="board-content">{content || '(본문 없음)'}</div>
+        <div className="post-actions">
+          <button type="button" aria-pressed={mine === 'edit'} onClick={() => toggle('edit')}>
+            수정
+          </button>
+          <button type="button" aria-pressed={mine === 'delete'} onClick={() => toggle('delete')}>
+            삭제
+          </button>
+          <button type="button" aria-pressed={mine === 'reply'} onClick={() => toggle('reply')}>
+            답글
+          </button>
+        </div>
       </div>
       {mine === 'edit' && (
         <BoardForm

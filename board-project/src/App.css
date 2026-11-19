@@ -304,3 +304,23 @@
 .post-head {
   margin-bottom: 2px;
 }
+
+/* 본문은 왼쪽, 수정/삭제/답글 버튼은 같은 줄 오른쪽 끝. 좁으면 버튼이 아래로 내려간다. */
+.post-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.post-body .board-content {
+  flex: 1 1 12em;
+  min-width: 0;
+}
+
+.post-body .post-actions {
+  flex: 0 0 auto;
+  margin-top: 0;
+  margin-left: auto;
+}
