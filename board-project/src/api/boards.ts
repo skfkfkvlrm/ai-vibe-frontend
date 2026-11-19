@@ -41,7 +41,7 @@ export const AUTH_EXPIRED_EVENT = 'auth:expired'
 
 const BASE = '/api/boards'
 
-async function request<T>(url: string, init?: RequestInit): Promise<T> {
+export async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const token = getToken()
   const headers = new Headers(init?.headers)
   if (token) headers.set('Authorization', `Bearer ${token}`)

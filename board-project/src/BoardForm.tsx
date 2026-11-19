@@ -8,8 +8,9 @@ interface Props {
   /**
    * 로그인 회원 기준으로 작성·수정하는 경우. 작성자는 이 이름으로 자동 입력되고
    * 비밀번호는 필요 없으므로 두 입력란을 숨긴다. 비회원이면 undefined.
+   * note는 안내 문구(기본 "로그인 계정"). 관리자가 남의 글을 고칠 때는 "관리자 권한으로 수정"을 쓴다.
    */
-  authed?: { name: string }
+  authed?: { name: string; note?: string }
   onSubmit: (input: BoardInput) => Promise<void>
   onCancel: () => void
 }
@@ -57,7 +58,9 @@ function BoardForm({ title, submitLabel, initial, authed, onSubmit, onCancel }: 
     <form className="board-form" onSubmit={handleSubmit}>
       <h3>{title}</h3>
       {authed ? (
-        <p className="board-form-note">작성자: {authed.name} (로그인 계정)</p>
+        <p className="board-form-note">
+          작성자: {authed.name} ({authed.note ?? '로그인 계정'})
+        </p>
       ) : (
         <>
           <div className="board-form-row">

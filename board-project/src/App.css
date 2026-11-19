@@ -412,3 +412,28 @@
   margin: 0 0 8px;
   opacity: 0.8;
 }
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.admin-tabs button[aria-selected='true'] {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.admin-warning {
+  margin: 4px 0 0;
+  color: #b45309;
+}
+
+.admin-confirm {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.board-table details summary {
+  cursor: pointer;
+}

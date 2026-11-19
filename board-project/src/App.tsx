@@ -1,4 +1,5 @@
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import AdminPage from './AdminPage'
 import { useAuth } from './auth/useAuth'
 import BoardList from './BoardList'
 import LoginPage from './LoginPage'
@@ -18,6 +19,11 @@ function App() {
             (member ? (
               <>
                 <span>{member.name}님</span>
+                {member.role === 'ADMIN' && (
+                  <Link className="button-link" to="/admin">
+                    관리자
+                  </Link>
+                )}
                 <button type="button" onClick={logout}>
                   로그아웃
                 </button>
@@ -39,6 +45,7 @@ function App() {
         <Route path="/boards" element={<BoardList />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </main>
   )

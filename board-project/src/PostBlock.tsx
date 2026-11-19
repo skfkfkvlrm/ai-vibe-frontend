@@ -29,7 +29,11 @@ function PostBlock({ board, content, member, active, onActive, onEdit, onReply, 
   const id = board.board_num
   const isMemberPost = board.member_id !== null
   const isOwner = member !== null && board.member_id === member.member_id
-  const canManage = !isMemberPost || isOwner
+  // 관리자는 모든 글을 수정·삭제할 수 있다(비밀번호 불필요). 최종 판정은 서버가 DB의 role로 한다.
+  const isAdmin = member?.role === 'ADMIN'
+  const canManage = !isMemberPost || isOwner || isAdmin
+  // 비밀번호가 필요 없는 경우: 회원 글의 소유자, 또는 관리자
+  const noPassword = isOwner || isAdmin
 
   const mine = active && active.kind !== 'create' && active.id === id ? active.kind : null
   const toggle = (kind: 'edit' | 'reply' | 'delete') =>
@@ -74,7 +78,11 @@ function PostBlock({ board, content, member, active, onActive, onEdit, onReply, 
             subject: board.board_subject,
             content: content ?? '',
           }}
-          authed={isMemberPost ? { name: board.board_name } : undefined}
+          authed={
+            noPassword
+              ? { name: board.board_name, note: isOwner ? undefined : '관리자 권한으로 수정' }
+              : undefined
+          }
           onSubmit={(input) => onEdit(id, input)}
           onCancel={() => onActive(null)}
         />
@@ -92,7 +100,7 @@ function PostBlock({ board, content, member, active, onActive, onEdit, onReply, 
       {mine === 'delete' && canManage && (
         <DeleteConfirm
           key={member ? 'member' : 'guest'}
-          needPassword={!isMemberPost}
+          needPassword={!noPassword}
           onConfirm={(pass) => onDelete(id, pass)}
           onCancel={() => onActive(null)}
         />
