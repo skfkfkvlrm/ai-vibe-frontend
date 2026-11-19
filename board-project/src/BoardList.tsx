@@ -10,6 +10,7 @@ import {
   type Board,
   type BoardInput,
 } from './api/boards'
+import { useAuth } from './auth/useAuth'
 import BoardForm from './BoardForm'
 import Loading from './Loading'
 import PostBlock, { type ActiveForm } from './PostBlock'
@@ -23,6 +24,7 @@ type Detail =
 const formatDate = (d: string | null) => d?.slice(0, 16).replace('T', ' ') ?? ''
 
 function BoardList() {
+  const { member } = useAuth()
   const [boards, setBoards] = useState<Board[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -106,7 +108,7 @@ function BoardList() {
     await afterWrite()
   }
 
-  const handleDelete = async (id: number, pass: string) => {
+  const handleDelete = async (id: number, pass?: string) => {
     await deleteBoard(id, pass)
     if (id === openId) {
       setOpenId(null)
@@ -134,6 +136,7 @@ function BoardList() {
     : []
 
   const postProps = {
+    member,
     active,
     onActive: setActive,
     onEdit: handleEdit,
@@ -154,8 +157,11 @@ function BoardList() {
       </div>
       {active?.kind === 'create' && (
         <BoardForm
+          // 로그인 상태가 바뀌면 폼을 새로 만들어 입력란 구성을 맞춘다.
+          key={member ? 'member' : 'guest'}
           title="새 글 작성"
           submitLabel="등록"
+          authed={member ? { name: member.name } : undefined}
           onSubmit={handleCreate}
           onCancel={() => setActive(null)}
         />

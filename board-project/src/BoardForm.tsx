@@ -5,12 +5,17 @@ interface Props {
   title: string
   submitLabel: string
   initial?: { name: string; subject: string; content: string }
+  /**
+   * 로그인 회원 기준으로 작성·수정하는 경우. 작성자는 이 이름으로 자동 입력되고
+   * 비밀번호는 필요 없으므로 두 입력란을 숨긴다. 비회원이면 undefined.
+   */
+  authed?: { name: string }
   onSubmit: (input: BoardInput) => Promise<void>
   onCancel: () => void
 }
 
 /** 글쓰기·답글·수정이 함께 쓰는 인라인 폼. */
-function BoardForm({ title, submitLabel, initial, onSubmit, onCancel }: Props) {
+function BoardForm({ title, submitLabel, initial, authed, onSubmit, onCancel }: Props) {
   const uid = useId()
   const [name, setName] = useState(initial?.name ?? '')
   const [pass, setPass] = useState('')
@@ -21,19 +26,27 @@ function BoardForm({ title, submitLabel, initial, onSubmit, onCancel }: Props) {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!name.trim() || !pass || !subject.trim()) {
+    if (!subject.trim()) {
+      setError('제목은 필수입니다.')
+      return
+    }
+    if (!authed && (!name.trim() || !pass)) {
       setError('작성자, 비밀번호, 제목은 필수입니다.')
       return
     }
     setSubmitting(true)
     setError(null)
     try {
-      await onSubmit({
-        board_name: name.trim(),
-        board_pass: pass,
-        board_subject: subject.trim(),
-        board_content: content,
-      })
+      await onSubmit(
+        authed
+          ? { board_subject: subject.trim(), board_content: content }
+          : {
+              board_name: name.trim(),
+              board_pass: pass,
+              board_subject: subject.trim(),
+              board_content: content,
+            },
+      )
     } catch (err) {
       setError(errorMessage(err))
       setSubmitting(false)
@@ -43,25 +56,31 @@ function BoardForm({ title, submitLabel, initial, onSubmit, onCancel }: Props) {
   return (
     <form className="board-form" onSubmit={handleSubmit}>
       <h3>{title}</h3>
-      <div className="board-form-row">
-        <label htmlFor={`${uid}-name`}>작성자</label>
-        <input
-          id={`${uid}-name`}
-          value={name}
-          maxLength={100}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div className="board-form-row">
-        <label htmlFor={`${uid}-pass`}>비밀번호</label>
-        <input
-          id={`${uid}-pass`}
-          type="password"
-          autoComplete="off"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-        />
-      </div>
+      {authed ? (
+        <p className="board-form-note">작성자: {authed.name} (로그인 계정)</p>
+      ) : (
+        <>
+          <div className="board-form-row">
+            <label htmlFor={`${uid}-name`}>작성자</label>
+            <input
+              id={`${uid}-name`}
+              value={name}
+              maxLength={100}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="board-form-row">
+            <label htmlFor={`${uid}-pass`}>비밀번호</label>
+            <input
+              id={`${uid}-pass`}
+              type="password"
+              autoComplete="off"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+            />
+          </div>
+        </>
+      )}
       <div className="board-form-row">
         <label htmlFor={`${uid}-subject`}>제목</label>
         <input

@@ -13,7 +13,9 @@ function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const registered = (location.state as { registered?: boolean } | null)?.registered === true
+  const state = location.state as { registered?: boolean; expired?: boolean } | null
+  const registered = state?.registered === true
+  const expired = state?.expired === true
 
   if (!ready) return null
   if (member) return <Navigate to="/boards" replace />
@@ -39,6 +41,7 @@ function LoginPage() {
     <form className="auth-form" onSubmit={handleSubmit}>
       <h2>로그인</h2>
       {registered && <p role="status">가입이 완료되었습니다. 로그인해 주세요.</p>}
+      {expired && <p role="alert">로그인이 만료되었습니다. 다시 로그인해 주세요.</p>}
       <div className="auth-form-row">
         <label htmlFor={`${uid}-id`}>아이디</label>
         <input

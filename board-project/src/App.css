@@ -407,3 +407,8 @@
   gap: 12px;
   margin-top: 8px;
 }
+
+.board-form-note {
+  margin: 0 0 8px;
+  opacity: 0.8;
+}

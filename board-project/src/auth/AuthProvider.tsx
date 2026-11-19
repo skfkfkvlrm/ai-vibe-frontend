@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { login as apiLogin, me, type Member } from '../api/auth'
-import { ApiError } from '../api/boards'
+import { ApiError, AUTH_EXPIRED_EVENT } from '../api/boards'
 import { AuthContext, type AuthValue } from './AuthContext'
 import { clearToken, getToken, setToken } from './token'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const navigate = useNavigate()
   const [member, setMember] = useState<Member | null>(null)
   // 저장된 토큰이 없으면 복원할 것이 없으므로 처음부터 준비된 상태로 시작한다.
   const [ready, setReady] = useState(() => getToken() === null)
@@ -29,6 +31,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       cancelled = true
     }
   }, [])
+
+  // 토큰을 보낸 요청이 401을 받으면(만료·무효) 로그아웃하고 로그인 화면으로 보낸다.
+  useEffect(() => {
+    const onExpired = () => {
+      clearToken()
+      setMember(null)
+      navigate('/login', { state: { expired: true } })
+    }
+    window.addEventListener(AUTH_EXPIRED_EVENT, onExpired)
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, onExpired)
+  }, [navigate])
 
   const value = useMemo<AuthValue>(
     () => ({
