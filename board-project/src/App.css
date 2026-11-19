@@ -324,3 +324,32 @@
   margin-top: 0;
   margin-left: auto;
 }
+
+/* 글자들이 원둘레에 놓여 한 바퀴씩 도는 로딩 표시 */
+.loading-ring {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 24px auto;
+  animation: loading-spin 3s linear infinite;
+}
+
+.loading-ring span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-weight: 600;
+  white-space: pre;
+}
+
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-ring {
+    animation: none;
+  }
+}

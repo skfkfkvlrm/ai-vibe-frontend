@@ -11,6 +11,7 @@ import {
   type BoardInput,
 } from './api/boards'
 import BoardForm from './BoardForm'
+import Loading from './Loading'
 import PostBlock, { type ActiveForm } from './PostBlock'
 import './App.css'
 
@@ -114,7 +115,7 @@ function BoardList() {
     await afterWrite()
   }
 
-  if (loading) return <p>불러오는 중...</p>
+  if (loading) return <Loading />
   if (error) return <p role="alert">오류: {error}</p>
 
   // 목록에는 원글만 표시하고, 답글은 원글을 펼쳤을 때만 보여준다.
