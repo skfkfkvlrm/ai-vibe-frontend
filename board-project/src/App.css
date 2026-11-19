@@ -235,3 +235,72 @@
   font-size: 0.85em;
   opacity: 0.7;
 }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.board-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px 0;
+}
+
+.board-form,
+.board-delete-confirm {
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid #8884;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.board-form h3 {
+  margin: 0 0 8px;
+}
+
+.board-form-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.board-form-row label {
+  flex: 0 0 4.5em;
+  padding-top: 4px;
+}
+
+.board-form-row input,
+.board-form-row textarea {
+  flex: 1;
+  font: inherit;
+}
+
+.board-form-actions,
+.post-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.board-delete-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.post {
+  margin: 6px 0;
+}
+
+.post-head {
+  margin-bottom: 2px;
+}
