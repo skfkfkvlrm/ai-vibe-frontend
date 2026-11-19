@@ -1,4 +1,4 @@
-import { ApiError, asBanInfo, banMessage, readErrorBody } from './boards'
+import { ApiError, asBanInfo, banMessage, readErrorBody, retryAfterSeconds, waitText } from './boards'
 
 export interface Member {
   member_id: number
@@ -58,6 +58,10 @@ export function authErrorMessage(e: unknown, kind: 'login' | 'signup'): string {
     if (kind === 'login' && e.status === 403) {
       const ban = asBanInfo(e.body)
       if (ban) return banMessage(ban)
+    }
+    if (kind === 'login' && e.status === 429) {
+      const wait = retryAfterSeconds(e.body)
+      return `로그인 실패가 반복되어 일시적으로 잠겼습니다.${wait ? ` ${waitText(wait)} 후` : ' 잠시 후'} 다시 시도해 주세요.`
     }
     if (kind === 'login' && e.status === 401) return '아이디 또는 비밀번호가 올바르지 않습니다.'
     if (kind === 'signup' && e.status === 409) return '이미 사용 중인 아이디 또는 이메일입니다.'

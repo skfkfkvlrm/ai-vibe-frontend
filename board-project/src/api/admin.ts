@@ -30,6 +30,18 @@ export interface AdminMember {
   password_reset_pending: boolean
 }
 
+/** 감사 로그 한 건. admin_id가 null이면 시스템 기록(예: 로그인 잠금)이다. */
+export interface AuditLog {
+  audit_id: number
+  admin_id: number | null
+  admin_login_id: string | null
+  action: string
+  target_type: string
+  target_id: number | null
+  detail: string | null
+  created_at: string
+}
+
 /** 1D·7D·30D: 지금부터 N일, PERMANENT: 영구, UNTIL: until에 지정한 미래 시각까지 */
 export type BanType = '1D' | '7D' | '30D' | 'PERMANENT' | 'UNTIL'
 
@@ -43,7 +55,11 @@ export const listDeletedBoards = (signal?: AbortSignal) =>
 export const restoreBoard = (id: number) =>
   request<Board>(`${BASE}/boards/${id}/restore`, { method: 'POST' })
 
-export const listMembers = (signal?: AbortSignal) =>
+/** 최신 200건, 최신순. 조회 전용. */
+export const listAuditLogs = (signal?: AbortSignal) =>
+  request<AuditLog[]>(`${BASE}/audit-logs`, { signal })
+
+export const listMembers =(signal?: AbortSignal) =>
   request<AdminMember[]>(`${BASE}/members`, { signal })
 
 export const banMember = (id: number, input: { reason: string; type: BanType; until?: string }) =>

@@ -6,6 +6,7 @@ import {
   restoreBoard,
   type DeletedBoard,
 } from './api/admin'
+import AdminAuditLogs from './AdminAuditLogs'
 import AdminMembers from './AdminMembers'
 import { useAuth } from './auth/useAuth'
 import Loading from './Loading'
@@ -13,7 +14,7 @@ import './App.css'
 
 const formatDate = (d: string | null) => d?.slice(0, 16).replace('T', ' ') ?? ''
 
-type Tab = 'deleted' | 'members'
+type Tab = 'deleted' | 'members' | 'audit'
 
 /** 삭제된 글·답글 목록. 한 건씩 복구한다(원글을 복구해도 답글은 그대로). */
 function DeletedBoards() {
@@ -144,8 +145,18 @@ function AdminPage() {
         >
           회원 목록
         </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === 'audit'}
+          onClick={() => setTab('audit')}
+        >
+          감사 로그
+        </button>
       </div>
-      {tab === 'deleted' ? <DeletedBoards /> : <AdminMembers />}
+      {tab === 'deleted' && <DeletedBoards />}
+      {tab === 'members' && <AdminMembers />}
+      {tab === 'audit' && <AdminAuditLogs />}
     </section>
   )
 }

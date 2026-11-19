@@ -60,6 +60,17 @@ export function banMessage(info: BanInfo): string {
   return `이용이 제한된 계정입니다.${reason} 제한 기간: ${until}`
 }
 
+/** 429 응답 본문에서 다시 시도할 수 있을 때까지 남은 초를 읽는다. 없으면 null. */
+export function retryAfterSeconds(body: unknown): number | null {
+  const v = typeof body === 'object' && body !== null ? (body as { retry_after_seconds?: unknown }).retry_after_seconds : null
+  return typeof v === 'number' && v > 0 ? v : null
+}
+
+/** 60초 이상은 올림한 분, 그보다 짧으면 초로 표시한다. */
+export function waitText(seconds: number): string {
+  return seconds >= 60 ? `${Math.ceil(seconds / 60)}분` : `${seconds}초`
+}
+
 /** 오류 응답 본문을 JSON으로 읽는다. 본문이 없거나 JSON이 아니면 undefined. */
 export async function readErrorBody(res: Response): Promise<unknown> {
   try {
@@ -136,6 +147,10 @@ export function errorMessage(e: unknown): string {
     }
     if (e.status === 404) return '이미 삭제되었거나 존재하지 않는 글입니다.'
     if (e.status === 400) return '입력값을 확인해 주세요.'
+    if (e.status === 429) {
+      const wait = retryAfterSeconds(e.body)
+      return `글쓰기가 너무 잦습니다.${wait ? ` ${waitText(wait)} 후` : ' 잠시 후'} 다시 시도해 주세요.`
+    }
   }
   return e instanceof Error ? e.message : '요청에 실패했습니다.'
 }
