@@ -1,4 +1,6 @@
 import { ApiError, asBanInfo, banMessage, request, retryAfterSeconds, waitText } from '../../shared/http'
+import { getToken } from '../../shared/token'
+import { me } from '../auth/api'
 
 export interface Board {
   board_num: number
@@ -71,20 +73,40 @@ export const listBoards = (params: ListParams, signal?: AbortSignal) => {
 export const getBoard = (id: number, options?: { count?: boolean }) =>
   request<Board>(`${BASE}/${id}${options?.count === false ? '?count=false' : ''}`)
 
+/**
+ * 작성 요청이 400을 받았는데 로그인 상태(토큰 있음)였다면, 로그인이 만료되어 서버가 비회원으로 본 탓일 수 있다.
+ * /me로 확인해 401이면 request()가 만료 이벤트를 발생시켜 로그인 화면으로 이동한다(서버 401이 1차 방어, 이것은 보조).
+ */
+async function writeChecked<T>(send: () => Promise<T>): Promise<T> {
+  try {
+    return await send()
+  } catch (e) {
+    const token = getToken()
+    if (e instanceof ApiError && e.status === 400 && token) {
+      await me(token).catch(() => undefined)
+    }
+    throw e
+  }
+}
+
 export const createBoard = (input: BoardInput) =>
-  request<Board>(BASE, {
-    method: 'POST',
-    headers: JSON_HEADERS,
-    body: JSON.stringify(input),
-  })
+  writeChecked(() =>
+    request<Board>(BASE, {
+      method: 'POST',
+      headers: JSON_HEADERS,
+      body: JSON.stringify(input),
+    }),
+  )
 
 /** parentId 글(원글 또는 답글)에 답글을 단다. */
 export const replyBoard = (parentId: number, input: BoardInput) =>
-  request<Board>(`${BASE}/${parentId}/replies`, {
-    method: 'POST',
-    headers: JSON_HEADERS,
-    body: JSON.stringify(input),
-  })
+  writeChecked(() =>
+    request<Board>(`${BASE}/${parentId}/replies`, {
+      method: 'POST',
+      headers: JSON_HEADERS,
+      body: JSON.stringify(input),
+    }),
+  )
 
 // PUT은 보내지 않은 board_file을 지우므로, 보낸 필드만 바꾸는 PATCH를 쓴다.
 export const updateBoard = (id: number, input: BoardInput) =>
