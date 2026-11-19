@@ -89,7 +89,6 @@ function BoardList() {
     <table className="board-table">
       <thead>
         <tr>
-          <th>번호</th>
           <th>제목</th>
           <th>작성자</th>
           <th>조회수</th>
@@ -104,7 +103,6 @@ function BoardList() {
           return (
             <Fragment key={b.board_num}>
               <tr className={isOpen ? 'board-row open' : 'board-row'}>
-                <td>{b.board_num}</td>
                 <td style={{ paddingLeft: `${b.re_lev * 16}px` }}>
                   {expandable ? (
                     <button
@@ -129,7 +127,7 @@ function BoardList() {
               </tr>
               {isOpen && (
                 <tr className="board-detail">
-                  <td colSpan={5}>
+                  <td colSpan={4}>
                     {detail?.status === 'loading' && <p>본문을 불러오는 중...</p>}
                     {detail?.status === 'error' && (
                       <p role="alert">오류: {detail.message}</p>
