@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login as apiLogin, me, type Member } from '../api/auth'
-import { ApiError, AUTH_EXPIRED_EVENT } from '../api/boards'
+import { login as apiLogin, me, type Member } from './api'
+import { ApiError, AUTH_EXPIRED_EVENT } from '../../shared/http'
 import { AuthContext, type AuthValue } from './AuthContext'
-import { clearToken, getToken, isResetNoticeDismissed, setResetNoticeDismissed, setToken } from './token'
+import { clearToken, getToken, isResetNoticeDismissed, setResetNoticeDismissed, setToken } from '../../shared/token'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()

@@ -1,11 +1,11 @@
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import AdminPage from './AdminPage'
-import { useAuth } from './auth/useAuth'
-import BoardList from './BoardList'
-import LoginPage from './LoginPage'
-import MyPage from './MyPage'
-import ResetNoticeDialog from './ResetNoticeDialog'
-import SignupPage from './SignupPage'
+import AdminPage from './features/admin/AdminPage'
+import { useAuth } from './features/auth/useAuth'
+import BoardList from './features/board/BoardList'
+import LoginPage from './features/auth/LoginPage'
+import MyPage from './features/account/MyPage'
+import ResetNoticeDialog from './features/account/ResetNoticeDialog'
+import SignupPage from './features/auth/SignupPage'
 
 function App() {
   const { member, ready, logout } = useAuth()

@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from './auth/useAuth'
-import './App.css'
+import { useAuth } from '../auth/useAuth'
+import '../../App.css'
 
 /**
  * 관리자가 임시 비밀번호로 초기화한 계정으로 로그인하면 한 번 띄우는 안내.

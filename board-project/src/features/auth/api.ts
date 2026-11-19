@@ -1,4 +1,4 @@
-import { ApiError, asBanInfo, banMessage, readErrorBody, retryAfterSeconds, waitText } from './boards'
+import { ApiError, asBanInfo, banMessage, readErrorBody, retryAfterSeconds, waitText } from '../../shared/http'
 
 export interface Member {
   member_id: number

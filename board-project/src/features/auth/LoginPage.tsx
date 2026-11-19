@@ -1,7 +1,7 @@
 import { useId, useState, type FormEvent } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { authErrorMessage } from './api/auth'
-import { useAuth } from './auth/useAuth'
+import { authErrorMessage } from './api'
+import { useAuth } from './useAuth'
 
 function LoginPage() {
   const uid = useId()

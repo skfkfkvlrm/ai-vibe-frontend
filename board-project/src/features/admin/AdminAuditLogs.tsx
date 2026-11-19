@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { adminErrorMessage, listAuditLogs, type AuditLog } from './api/admin'
-import Loading from './Loading'
-import './App.css'
+import { adminErrorMessage, listAuditLogs, type AuditLog } from './api'
+import Loading from '../../shared/Loading'
+import '../../App.css'
 
 const formatDate = (d: string) => d.slice(0, 19).replace('T', ' ')
 

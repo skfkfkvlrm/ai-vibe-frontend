@@ -1,5 +1,6 @@
-import type { Member, TokenResponse } from './auth'
-import { ApiError, asBanInfo, banMessage, request, type Board } from './boards'
+import type { Member, TokenResponse } from '../auth/api'
+import { ApiError, asBanInfo, banMessage, request } from '../../shared/http'
+import type { Board } from '../board/api'
 
 const BASE = '/api/members/me'
 const JSON_HEADERS = { 'Content-Type': 'application/json' }

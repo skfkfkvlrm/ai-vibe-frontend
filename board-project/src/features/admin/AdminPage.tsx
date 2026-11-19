@@ -5,12 +5,12 @@ import {
   listDeletedBoards,
   restoreBoard,
   type DeletedBoard,
-} from './api/admin'
+} from './api'
 import AdminAuditLogs from './AdminAuditLogs'
 import AdminMembers from './AdminMembers'
-import { useAuth } from './auth/useAuth'
-import Loading from './Loading'
-import './App.css'
+import { useAuth } from '../auth/useAuth'
+import Loading from '../../shared/Loading'
+import '../../App.css'
 
 const formatDate = (d: string | null) => d?.slice(0, 16).replace('T', ' ') ?? ''
 

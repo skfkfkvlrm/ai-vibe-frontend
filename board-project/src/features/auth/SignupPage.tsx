@@ -1,7 +1,7 @@
 import { useId, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { authErrorMessage, signup } from './api/auth'
-import { useAuth } from './auth/useAuth'
+import { authErrorMessage, signup } from './api'
+import { useAuth } from './useAuth'
 
 // 백엔드(AuthController)와 같은 규칙. 최종 검증은 서버가 한다.
 const LOGIN_ID = /^[a-z0-9_]{4,20}$/

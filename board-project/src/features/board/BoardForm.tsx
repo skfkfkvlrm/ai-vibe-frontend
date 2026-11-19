@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import { errorMessage, type BoardInput } from './api/boards'
+import { errorMessage, type BoardInput } from './api'
 
 interface Props {
   title: string

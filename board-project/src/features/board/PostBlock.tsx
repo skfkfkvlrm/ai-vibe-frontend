@@ -1,5 +1,5 @@
-import type { Member } from './api/auth'
-import type { Board, BoardInput } from './api/boards'
+import type { Member } from '../auth/api'
+import type { Board, BoardInput } from './api'
 import BoardForm from './BoardForm'
 import DeleteConfirm from './DeleteConfirm'
 

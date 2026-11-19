@@ -9,12 +9,12 @@ import {
   updateBoard,
   type Board,
   type BoardInput,
-} from './api/boards'
-import { useAuth } from './auth/useAuth'
+} from './api'
+import { useAuth } from '../auth/useAuth'
 import BoardForm from './BoardForm'
-import Loading from './Loading'
+import Loading from '../../shared/Loading'
 import PostBlock, { type ActiveForm } from './PostBlock'
-import './App.css'
+import '../../App.css'
 
 type Detail =
   | { status: 'loading' }

@@ -1,4 +1,5 @@
-import { ApiError, request, type Board } from './boards'
+import { ApiError, request } from '../../shared/http'
+import type { Board } from '../board/api'
 
 /** 관리자용 삭제된 글·답글 한 건. root_deleted는 답글의 원글도 삭제 상태인지 여부. */
 export interface DeletedBoard {

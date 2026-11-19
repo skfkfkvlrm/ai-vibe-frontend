@@ -7,9 +7,9 @@ import {
   unbanMember,
   type AdminMember,
   type BanType,
-} from './api/admin'
-import Loading from './Loading'
-import './App.css'
+} from './api'
+import Loading from '../../shared/Loading'
+import '../../App.css'
 
 const formatDate = (d: string | null) => d?.slice(0, 16).replace('T', ' ') ?? ''
 

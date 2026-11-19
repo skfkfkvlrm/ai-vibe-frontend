@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { Member } from '../api/auth'
+import type { Member } from './api'
 
 export interface AuthValue {
   /** 로그인한 회원. 로그아웃 상태면 null */

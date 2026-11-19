@@ -6,11 +6,11 @@ import {
   myPosts,
   updateProfile,
   withdraw,
-} from './api/account'
-import type { Board } from './api/boards'
-import { useAuth } from './auth/useAuth'
-import Loading from './Loading'
-import './App.css'
+} from './api'
+import type { Board } from '../board/api'
+import { useAuth } from '../auth/useAuth'
+import Loading from '../../shared/Loading'
+import '../../App.css'
 
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
 const formatDate = (d: string | null) => d?.slice(0, 16).replace('T', ' ') ?? ''

@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import { errorMessage } from './api/boards'
+import { errorMessage } from './api'
 
 interface Props {
   /** 비회원 글이면 true(비밀번호 입력), 내 글(로그인 회원)이면 false(확인만) */
