@@ -11,7 +11,7 @@ export interface Product {
   hasPicL: boolean
 }
 
-async function request<T>(url: string, init?: RequestInit): Promise<T> {
+export async function request<T>(url: string, init?: RequestInit): Promise<T> {
   // 로그인 상태면 토큰을 붙이고, 토큰을 보냈는데 401이 오면(만료·무효) 로그아웃 처리를 요청한다.
   const token = getToken()
   const headers = new Headers(init?.headers)

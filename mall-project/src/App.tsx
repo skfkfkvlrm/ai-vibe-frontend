@@ -6,7 +6,9 @@ import MembersPage from './admin/MembersPage'
 import AdminRoute from './auth/AdminRoute'
 import { isAdmin } from './auth/isAdmin'
 import { useAuth } from './auth/useAuth'
+import CartPage from './pages/CartPage'
 import MyPage from './pages/MyPage'
+import OrderPage from './pages/OrderPage'
 import ProductDetail from './pages/ProductDetail'
 import ProductForm from './pages/ProductForm'
 import ProductList from './pages/ProductList'
@@ -22,6 +24,7 @@ function SiteHeader() {
           {member ? (
             <>
               {isAdmin(member) && <Link to="/admin/members">회원 관리</Link>}
+              <Link to="/cart">장바구니</Link>
               <Link to="/mypage">{member.name}님</Link>
               <button type="button" className="btn" onClick={logout}>
                 로그아웃
@@ -49,6 +52,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/orders/:id" element={<OrderPage />} />
           <Route
             path="/products/new"
             element={
