@@ -58,7 +58,9 @@ export const removeCartItem = (id: number) => request<Cart>(`/api/cart/${id}`, {
 
 export const placeOrder = (form: OrderForm) => request<Order>('/api/orders', json('POST', form))
 
-export const getOrder = (id: string, signal?: AbortSignal) => request<Order>(`/api/orders/${id}`, { signal })
+export const getOrders = (signal?: AbortSignal) => request<Order[]>('/api/orders', { signal })
+
+export const getOrder =(id: string, signal?: AbortSignal) => request<Order>(`/api/orders/${id}`, { signal })
 
 /** 모의 결제. 실제 PG 연동 없이 서버가 상태만 PAID로 바꾼다. */
 export const payOrder = (id: number) => request<Order>(`/api/orders/${id}/pay`, { method: 'POST' })

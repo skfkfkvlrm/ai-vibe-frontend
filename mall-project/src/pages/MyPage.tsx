@@ -1,8 +1,9 @@
 import { useId, useState, type FormEvent } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useSearchParams } from 'react-router-dom'
 import { accountErrorMessage, changePassword, updateProfile } from '../auth/accountApi'
 import type { Member } from '../auth/api'
 import { useAuth } from '../auth/useAuth'
+import OrderHistory from './OrderHistory'
 
 // 백엔드(MemberRules)와 같은 규칙. 최종 검증은 서버가 한다.
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
@@ -160,12 +161,40 @@ function PasswordSection() {
 
 export default function MyPage() {
   const { member, ready } = useAuth()
+  const [params, setParams] = useSearchParams()
   if (!ready) return null
   if (!member) return <Navigate to="/login" replace />
+  const tab = params.get('tab') === 'orders' ? 'orders' : 'profile'
   return (
     <>
-      <ProfileSection member={member} />
-      <PasswordSection />
+      <div className="tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === 'profile'}
+          className={tab === 'profile' ? 'tab active' : 'tab'}
+          onClick={() => setParams({})}
+        >
+          내 정보
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === 'orders'}
+          className={tab === 'orders' ? 'tab active' : 'tab'}
+          onClick={() => setParams({ tab: 'orders' })}
+        >
+          구매 이력
+        </button>
+      </div>
+      {tab === 'orders' ? (
+        <OrderHistory />
+      ) : (
+        <>
+          <ProfileSection member={member} />
+          <PasswordSection />
+        </>
+      )}
     </>
   )
 }
