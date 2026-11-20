@@ -394,6 +394,39 @@
   background: #dcfce7;
 }
 
+.badge-partial {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.badge-canceled {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.order-cancel-form {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    resize: vertical;
+  }
+}
+
+.refund-total {
+  margin: 8px 0 0;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
 .order-toggle {
   width: 100%;
   padding: 0;

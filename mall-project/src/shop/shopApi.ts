@@ -16,22 +16,32 @@ export interface Cart {
 }
 
 export interface OrderLine {
+  lineId: number
   productId: number | null
   name: string
   price: number
   quantity: number
+  /** 이미 취소된 수량. 남은 수량 = quantity - canceledQuantity */
+  canceledQuantity: number
 }
 
 export interface Order {
   id: number
   orderDate: string
   totalPrice: number
-  /** ORDERED(결제 전) | PAID(모의 결제 완료) */
-  status: 'ORDERED' | 'PAID'
+  /** ORDERED(결제 전) | PAID(모의 결제 완료) | PARTIALLY_CANCELED(일부 취소) | CANCELED(전체 취소) */
+  status: 'ORDERED' | 'PAID' | 'PARTIALLY_CANCELED' | 'CANCELED'
   formName: string
   formMail: string
   formMsg: string | null
   lines: OrderLine[]
+  /** 모의 환불 누적 금액 */
+  refundedTotal: number
+}
+
+export interface CancelItem {
+  lineId: number
+  quantity: number
 }
 
 export interface OrderForm {
@@ -64,3 +74,7 @@ export const getOrder =(id: string, signal?: AbortSignal) => request<Order>(`/ap
 
 /** 모의 결제. 실제 PG 연동 없이 서버가 상태만 PAID로 바꾼다. */
 export const payOrder = (id: number) => request<Order>(`/api/orders/${id}/pay`, { method: 'POST' })
+
+/** 수량 단위 부분 취소(모의 환불). 사유 필수(200자 이하). 갱신된 주문을 돌려준다. */
+export const cancelOrder = (id: number, reason: string, items: CancelItem[]) =>
+  request<Order>(`/api/orders/${id}/cancel`, json('POST', { reason, items }))
