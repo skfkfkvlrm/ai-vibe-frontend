@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { won } from '../api'
 import { useAuth } from '../auth/useAuth'
+import CancelSummary from '../shop/CancelSummary'
 import { getOrder, payOrder, type Order } from '../shop/shopApi'
 
 const errText = (e: unknown) => (e instanceof Error ? e.message : '알 수 없는 오류')
@@ -57,17 +58,25 @@ export default function OrderPage() {
     }
   }
 
-  const paid = order.status === 'PAID'
+  const isCanceled = order.status === 'CANCELED'
+  const isPaid = order.status === 'PAID' || order.status === 'PARTIALLY_CANCELED'
+  const isOrdered = order.status === 'ORDERED'
+
+  const heading = isCanceled ? '주문 취소됨' : isPaid ? '결제 완료' : '주문 확인'
+  const noticeClass = isPaid ? 'notice success' : 'notice'
+  const noticeText = isCanceled
+    ? `취소된 주문입니다. 주문번호 ${order.id}`
+    : isPaid
+      ? `결제가 완료되었습니다. 주문번호 ${order.id} (모의 결제 · 실제 청구 없음)`
+      : `주문이 접수되었습니다. 주문번호 ${order.id} — 아래 내용을 확인하고 결제를 진행해 주세요.`
 
   return (
     <>
       <div className="page-head">
-        <h1>{paid ? '결제 완료' : '주문 확인'}</h1>
+        <h1>{heading}</h1>
       </div>
-      <p className={paid ? 'notice success' : 'notice'} role="status">
-        {paid
-          ? `결제가 완료되었습니다. 주문번호 ${order.id} (모의 결제 · 실제 청구 없음)`
-          : `주문이 접수되었습니다. 주문번호 ${order.id} — 아래 내용을 확인하고 결제를 진행해 주세요.`}
+      <p className={noticeClass} role="status">
+        {noticeText}
       </p>
       {error && (
         <p className="error" role="alert">
@@ -90,16 +99,20 @@ export default function OrderPage() {
               <tr key={i}>
                 <td>{l.name}</td>
                 <td>{won(l.price)}</td>
-                <td>{l.quantity}</td>
-                <td>{won(l.price * l.quantity)}</td>
+                <td>
+                  {l.quantity}
+                  {l.canceledQuantity > 0 && ` (취소 ${l.canceledQuantity})`}
+                </td>
+                <td>{won(l.price * (l.quantity - l.canceledQuantity))}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <p className="cart-total">
-        총 결제 금액 <strong>{won(order.totalPrice)}</strong>
+        {isOrdered ? '결제 예정 금액' : '결제 금액'} <strong>{won(order.payableAmount)}</strong>
       </p>
+      <CancelSummary order={order} />
       <dl className="detail-info">
         <dt>주문자</dt>
         <dd>{order.formName}</dd>
@@ -109,13 +122,7 @@ export default function OrderPage() {
         <dd>{order.formMsg || '-'}</dd>
       </dl>
 
-      {paid ? (
-        <p>
-          <Link to="/" className="btn primary">
-            쇼핑 계속하기
-          </Link>
-        </p>
-      ) : (
+      {isOrdered ? (
         <div className="auth-form">
           <h2>결제 수단 (모의)</h2>
           <div className="auth-form-row">
@@ -127,11 +134,23 @@ export default function OrderPage() {
             </select>
           </div>
           <div className="auth-form-actions">
-            <button type="button" className="btn primary" disabled={paying} onClick={() => void pay()}>
-              {paying ? '결제 처리 중...' : `${won(order.totalPrice)} 결제하기`}
+            <button
+              type="button"
+              className="btn primary"
+              disabled={paying}
+              aria-label={`${won(order.payableAmount)} 결제하기`}
+              onClick={() => void pay()}
+            >
+              {paying ? '결제 처리 중...' : `${won(order.payableAmount)} 결제하기`}
             </button>
           </div>
         </div>
+      ) : (
+        <p>
+          <Link to="/" className="btn primary">
+            쇼핑 계속하기
+          </Link>
+        </p>
       )}
     </>
   )

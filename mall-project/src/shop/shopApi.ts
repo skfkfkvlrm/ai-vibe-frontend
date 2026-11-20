@@ -37,6 +37,23 @@ export interface Order {
   lines: OrderLine[]
   /** 모의 환불 누적 금액 */
   refundedTotal: number
+  /** 취소된 수량 x 주문 시점 단가의 합 */
+  canceledAmount: number
+  /** 결제 예정 금액 = totalPrice - canceledAmount */
+  payableAmount: number
+  /** 취소 내역(취소 일시 오름차순). 차감 사유 표시에 쓴다. */
+  cancels: OrderCancel[]
+}
+
+export interface OrderCancel {
+  productName: string
+  quantity: number
+  /** 이 취소로 차감된 금액(수량 x 단가) */
+  amount: number
+  /** 실제 모의 환불액(결제 전 취소는 0) */
+  refundAmount: number
+  reason: string
+  canceledAt: string
 }
 
 export interface CancelItem {

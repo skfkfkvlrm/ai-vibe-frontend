@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { won } from '../api'
+import CancelSummary from '../shop/CancelSummary'
 import { cancelOrder, getOrders, type Order } from '../shop/shopApi'
 
 const STATUS_META: Record<Order['status'], { label: string; className: string }> = {
@@ -116,6 +117,8 @@ function OrderDetail({ order, onUpdated }: OrderDetailProps) {
         </tbody>
       </table>
 
+      <CancelSummary order={order} />
+
       {canCancel && (
         <div className='order-cancel-form'>
           <textarea
@@ -153,10 +156,6 @@ function OrderDetail({ order, onUpdated }: OrderDetailProps) {
         <dt>요청사항</dt>
         <dd>{order.formMsg || '-'}</dd>
       </dl>
-
-      {order.refundedTotal > 0 && (
-        <p className='refund-total'>환불 금액: {won(order.refundedTotal)}</p>
-      )}
 
       {order.status === 'ORDERED' && (
         <div className='auth-form-actions'>
@@ -248,7 +247,16 @@ export default function OrderHistory() {
                       {summarizeLines(order)}
                     </button>
                   </td>
-                  <td>{won(order.totalPrice)}</td>
+                  <td>
+                    {order.status !== 'CANCELED' && order.canceledAmount > 0 ? (
+                      <>
+                        {won(order.payableAmount)}
+                        <span className='order-total-sub'>(주문 합계 {won(order.totalPrice)})</span>
+                      </>
+                    ) : (
+                      won(order.totalPrice)
+                    )}
+                  </td>
                   <td>
                     <span className={`badge ${statusMeta.className}`}>{statusMeta.label}</span>
                   </td>
