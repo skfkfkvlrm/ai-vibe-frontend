@@ -345,3 +345,33 @@
   gap: 8px;
   margin-top: 16px;
 }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--bg, #fff);
+  border-radius: 10px;
+  padding: 24px 28px;
+  min-width: 280px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+
+  p {
+    margin: 0 0 16px;
+    font-size: 17px;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}

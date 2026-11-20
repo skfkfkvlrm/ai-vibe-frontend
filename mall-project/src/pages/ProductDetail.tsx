@@ -93,17 +93,35 @@ export default function ProductDetail() {
             <button type="button" className="btn primary" disabled={adding} onClick={() => void handleAdd()}>
               {adding ? '담는 중...' : '장바구니 담기'}
             </button>
-            {cartMsg && (
-              <span className={cartMsg.error ? 'error' : undefined} role="status">
-                {cartMsg.text} {!cartMsg.error && <Link to="/cart">장바구니 보기</Link>}
-              </span>
-            )}
           </dd>
         </dl>
       </div>
       <p>
         <Link to="/">← 목록으로</Link>
       </p>
+      {cartMsg && (
+        <div className="modal-backdrop" onClick={() => setCartMsg(null)}>
+          <div
+            className="modal"
+            role="alertdialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.key === 'Escape' && setCartMsg(null)}
+          >
+            <p className={cartMsg.error ? 'error' : undefined}>{cartMsg.text}</p>
+            <div className="modal-actions">
+              <button type="button" className="btn" autoFocus onClick={() => setCartMsg(null)}>
+                {cartMsg.error ? '닫기' : '계속 쇼핑'}
+              </button>
+              {!cartMsg.error && (
+                <button type="button" className="btn primary" onClick={() => navigate('/cart')}>
+                  장바구니 보기
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
