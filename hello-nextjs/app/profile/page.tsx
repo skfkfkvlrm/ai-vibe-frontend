@@ -1,7 +1,8 @@
 export default function Profile() {
     return (
         <div>
-            <h1>주인장 소개</h1>
+            <p>안녕</p>
+            <button><a href='/'>돌아가기</a></button>
         </div>
     );
 }
