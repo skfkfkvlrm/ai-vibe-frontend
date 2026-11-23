@@ -1,7 +1,12 @@
+import { notFound } from "next/navigation"
+
 export default async function ProductIdPage(
     { params, }: { params: Promise<{ productId: string }> }
 ) {
     const productId = (await params).productId;
+    if (parseInt(productId) > 5 || parseInt(productId) < 1) {
+        notFound();
+    }
     let productName = '';
     let productImage = '';
 
