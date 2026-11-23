@@ -10,6 +10,7 @@ export default function Home() {
           <a href="/about">홈페이지 소개</a><br />
           <a href="/profile">주인장 소개</a><br />
           <a href="/blog">블로그</a>
+          <a href='/products'>제품</a>
         </div>
       </h1>
     </div>

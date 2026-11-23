@@ -1,0 +1,13 @@
+export default function ProductsPage() {
+    return (
+        <div>
+            <h1>제품</h1>
+            <a href='/products/1'>첫번째 제품</a><br />
+            <a href='/products/2'>두번째 제품</a><br />
+            <a href='/products/3'>세번째 제품</a><br />
+            <a href='/products/4'>네번째 제품</a><br />
+            <a href='/products/5'>다섯번째 제품</a><br />
+            <button><a href='/'>돌아가기</a></button>
+        </div>
+    );
+}
