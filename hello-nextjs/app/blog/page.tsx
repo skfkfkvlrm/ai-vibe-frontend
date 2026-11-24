@@ -1,4 +1,4 @@
-export default function Blog() {
+export default async function Blog() {
     return (
         <div>
             <p>게시글 목록</p>
@@ -6,4 +6,4 @@ export default function Blog() {
             <button><a href='/'>돌아가기</a></button>
         </div >
     );
-}   
+}
