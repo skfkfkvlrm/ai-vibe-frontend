@@ -16,7 +16,7 @@ export const travels: Travel[] = [
         id: 2,
         name: '월정리 해변',
         description: '월정리',
-        image: 'woljeonri.jpg'
+        image: 'woljeongri.jpg'
     },
     {
         id: 3,
