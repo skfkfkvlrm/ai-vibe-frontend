@@ -20,7 +20,8 @@ export default function Home() {
           <a href='/dashboard'>대시보드</a><br />
           <a href='/calc'>계산기</a><br />
           <a href='/lib'>비밀</a><br />
-          <a href='/cats'>고양이</a>
+          <a href='/cats'>고양이</a><br />
+          <a href='/dogs'>강아지</a>
         </div>
       </h1>
     </div>
