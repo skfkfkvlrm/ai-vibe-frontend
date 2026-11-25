@@ -9,7 +9,8 @@ export default function PlaceLayout({
 }) {
     return (
         <div>
-            <div>{children}</div>
+            <style>{`.place-children a, .place-children br { display: none; }`}</style>
+            <div className="place-children">{children}</div>
             <div style={{ display: 'flex', gap: '20px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div>{list}</div>
