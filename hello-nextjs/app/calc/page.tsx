@@ -23,12 +23,13 @@ export default function CalcPage() {
                 <input type="text" placeholder="두번째 숫자를 입력하세요"
                     value={secondNum} onChange={(e) => setSecondNum(Number(e.target.value))}></input><br />
             </p>
-            <button style={{
+            <button onClick={addSum} style={{
                 backgroundColor: "#000fff",
                 color: "#ffffff",
                 padding: "10px 20px"
             }}>+</button>
             <p>합계: {sum}</p>
+            <button><a href='/'>돌아가기</a></button>
         </div>
     );
 }

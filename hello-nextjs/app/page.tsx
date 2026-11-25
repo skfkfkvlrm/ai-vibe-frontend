@@ -19,7 +19,8 @@ export default function Home() {
           <a href='/health'>건강</a><br />
           <a href='/dashboard'>대시보드</a><br />
           <a href='/calc'>계산기</a><br />
-          <a href='/lib'>비밀</a>
+          <a href='/lib'>비밀</a><br />
+          <a href='/cats'>고양이</a>
         </div>
       </h1>
     </div>
