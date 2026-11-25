@@ -5,17 +5,18 @@ export default async function Detail(
     { params }: { params: Promise<{ productId: string }> }
 ) {
     const productId = (await params).productId;
-    const travel = products.find(
+    const product = products.find(
         (item) => item.id === Number(productId)
-    ); if (!travel) {
+    ); if (!product) {
         notFound();
     }
     return (
         <div>
-            <h1>{productId}. {travel.name}</h1><br />
-            <p>가격: {travel.price}</p>
-            <p>{travel.description}</p>
-            <img src={`/image/${travel.image}`} width={300}></img><br />
+            <h1>제품 소개입니다</h1>
+            <h2>{productId}. {product.name}</h2><br />
+            <p>가격: {product.price}</p>
+            <p>{product.description}</p>
+            <img src={product.image} width={300}></img><br />
         </div >
     );
 }
