@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
+import { inputStyle, buttonStyle, layoutStyle } from "../_lib/styles";
 
 type Post = {
     userId: number;
@@ -13,6 +14,7 @@ export default function PostsPage() {
     const [searchType, setSearchType] = useState<"userId" | "id">("userId");
     const [keyword, setKeyword] = useState<number>(0);
     const [posts, setPosts] = useState<Post[]>([]);
+
     async function loadPosts() {
         const query = keyword > 0 ? `?${searchType}=${keyword}` : "";
         const response = await fetch(
@@ -33,15 +35,12 @@ export default function PostsPage() {
                     <option value={'id'}>게시글 번호</option>
                 </select>
                 <input
-                    type="text" placeholder="번호를 입력하세요"
-                    value={keyword} onChange={(e) => setKeyword(Number(e.target.value))}>
+                    type="number" placeholder="번호를 입력하세요" min={0}
+                    value={keyword} onChange={(e) => setKeyword(Number(e.target.value))}
+                    style={inputStyle}>
                 </input></p>
             <button onClick={loadPosts}
-                style={{
-                    backgroundColor: "#000fff",
-                    color: "#ffffff",
-                    padding: "10px 20px"
-                }}>조회</button>
+                style={buttonStyle}>조회</button>
             {
                 posts.length === 0 ? <p>게시글이 없습니다.</p> : (
                     <ul>
@@ -54,6 +53,7 @@ export default function PostsPage() {
                     </ul>
                 )
             }
+            <button style={buttonStyle}><a href='/'>돌아가기</a></button>
         </div >
     );
 }
