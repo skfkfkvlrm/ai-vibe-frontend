@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "../japan/japan.module.css";
 import { api, notifyChanged } from "./events";
+import { useModal } from "./ModalProvider";
 
 type Initial = { id?: number; name: string; sea: string; eat: string; picture: string };
 
 // 생성/수정 공용 폼. 입력 검증은 서버가 최종 책임지며 여기서는 UX용 제한만 둔다.
 export default function DestinationForm({ initial }: { initial?: Initial }) {
   const router = useRouter();
-  const [error, setError] = useState("");
+  const { alert } = useModal();
   const [busy, setBusy] = useState(false);
   const editing = initial?.id !== undefined;
 
@@ -24,16 +25,16 @@ export default function DestinationForm({ initial }: { initial?: Initial }) {
       picture: String(f.get("picture")),
     };
     setBusy(true);
-    setError("");
     try {
       const saved = editing
         ? await api(`/api/japan/${initial!.id}`, "PUT", body)
         : await api("/api/japan", "POST", body);
       notifyChanged();
       router.push(`/japan/${saved.id}`);
+      await alert("저장되었습니다.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "저장에 실패했습니다.");
       setBusy(false);
+      await alert(err instanceof Error ? err.message : "저장에 실패했습니다.");
     }
   }
 
@@ -64,7 +65,6 @@ export default function DestinationForm({ initial }: { initial?: Initial }) {
           defaultValue={initial?.picture ?? "/images/"}
         />
       </label>
-      {error && <p className={styles.error} role="alert">{error}</p>}
       <div className={styles.actions}>
         <button type="submit" className={styles.button} disabled={busy}>
           {busy ? "저장 중…" : "저장"}

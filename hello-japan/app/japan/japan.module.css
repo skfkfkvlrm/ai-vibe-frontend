@@ -240,3 +240,50 @@
   border: 1px solid var(--kin);
   border-radius: 4px;
 }
+
+/* 알림 모달 (native <dialog>) */
+.modal {
+  width: min(92vw, 420px);
+  margin: auto;
+  padding: 24px;
+  color: var(--sumi);
+  font-size: 18px;
+  font-family: "Noto Serif KR", "Noto Serif JP", "Yu Mincho", "Batang", serif;
+  background: #f5efe0;
+  border: 2px solid #b8934a;
+  border-radius: 6px;
+  outline: 1px solid #b8934a;
+  outline-offset: 4px;
+  box-shadow: 8px 8px 0 rgba(31, 58, 95, 0.25);
+}
+
+.modal::backdrop {
+  background: rgba(43, 38, 34, 0.6);
+}
+
+.modalBody {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.modalSun {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #c0392b;
+}
+
+.modalMessage {
+  margin: 0;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}

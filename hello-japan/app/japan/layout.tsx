@@ -1,3 +1,4 @@
+import ModalProvider from "../_components/ModalProvider";
 import styles from "./japan.module.css";
 
 export default function JapanLayout({
@@ -10,6 +11,7 @@ export default function JapanLayout({
 }) {
   return (
     <div className={styles.page}>
+      <ModalProvider>
       <div className={styles.container}>
         <header className={styles.header}>
           <span className={styles.sun} aria-hidden="true" />
@@ -23,6 +25,7 @@ export default function JapanLayout({
           <main className={styles.main}>{detail}</main>
         </div>
       </div>
+      </ModalProvider>
     </div>
   );
 }
