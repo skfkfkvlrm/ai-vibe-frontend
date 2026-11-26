@@ -1,0 +1,169 @@
+/* 일본 전통 미감: 와시(和紙) 배경 + 청해파(青海波) 문양 + 주홍(朱)/남색(藍) 포인트 */
+.page {
+  --washi: #f5efe0;
+  --sumi: #2b2622;
+  --ai: #1f3a5f;
+  --shu: #c0392b;
+  --kin: #b8934a;
+
+  min-height: 100vh;
+  color: var(--sumi);
+  font-family: "Noto Serif KR", "Noto Serif JP", "Yu Mincho", "Batang", serif;
+  background-color: var(--washi);
+  background-image:
+    radial-gradient(circle at 50% 100%, transparent 0 28%, rgba(31, 58, 95, 0.09) 29% 31%, transparent 32% 44%, rgba(31, 58, 95, 0.09) 45% 47%, transparent 48%),
+    radial-gradient(circle at 0 100%, transparent 0 28%, rgba(31, 58, 95, 0.09) 29% 31%, transparent 32% 44%, rgba(31, 58, 95, 0.09) 45% 47%, transparent 48%),
+    radial-gradient(circle at 100% 100%, transparent 0 28%, rgba(31, 58, 95, 0.09) 29% 31%, transparent 32% 44%, rgba(31, 58, 95, 0.09) 45% 47%, transparent 48%);
+  background-size: 64px 32px;
+}
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  border-bottom: 3px double var(--kin);
+}
+
+.sun {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--shu);
+  box-shadow: 0 0 0 4px var(--washi), 0 0 0 5px var(--shu);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  letter-spacing: 0.25em;
+  color: var(--ai);
+}
+
+.subtitle {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--kin);
+}
+
+.body {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.side {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 목록 */
+.listTitle {
+  margin: 0 0 12px;
+  padding-left: 10px;
+  font-size: 1.05rem;
+  letter-spacing: 0.2em;
+  color: var(--ai);
+  border-left: 4px solid var(--shu);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--kin);
+  border-radius: 4px;
+}
+
+.list li + li {
+  border-top: 1px dashed rgba(184, 147, 74, 0.6);
+}
+
+.link {
+  display: block;
+  padding: 12px 16px;
+  color: var(--sumi);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: background 0.2s, color 0.2s, padding-left 0.2s;
+}
+
+.link:hover {
+  background: rgba(192, 57, 43, 0.09);
+  color: var(--shu);
+  padding-left: 22px;
+}
+
+.message {
+  color: #6b6258;
+}
+
+/* 상세 */
+.card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--kin);
+  border-radius: 4px;
+  padding: 24px;
+  box-shadow: 6px 6px 0 rgba(31, 58, 95, 0.12);
+}
+
+.cardTitle {
+  margin: 0 0 16px;
+  font-size: 2rem;
+  letter-spacing: 0.3em;
+  color: var(--ai);
+}
+
+.photo {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border: 6px solid var(--washi);
+  outline: 1px solid var(--kin);
+}
+
+.info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 18px;
+  margin: 20px 0 0;
+}
+
+.info dt {
+  font-weight: 700;
+  color: var(--shu);
+  letter-spacing: 0.15em;
+}
+
+.info dd {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.error {
+  color: var(--shu);
+}
+
+@media (max-width: 720px) {
+  .body {
+    flex-direction: column;
+  }
+  .side {
+    width: 100%;
+  }
+}

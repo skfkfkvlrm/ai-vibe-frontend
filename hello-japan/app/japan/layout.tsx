@@ -1,3 +1,5 @@
+import styles from "./japan.module.css";
+
 export default function JapanLayout({
   list,
   detail,
@@ -7,11 +9,19 @@ export default function JapanLayout({
   detail: React.ReactNode;
 }) {
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-4 p-6">
-      <h1 className="text-2xl font-bold">🗾 hello-japan 여행지</h1>
-      <div className="flex flex-1 gap-6">
-        <aside className="w-56 shrink-0">{list}</aside>
-        <main className="flex-1">{detail}</main>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <span className={styles.sun} aria-hidden="true" />
+          <div>
+            <h1 className={styles.title}>hello-japan</h1>
+            <p className={styles.subtitle}>日本 旅行地 案内</p>
+          </div>
+        </header>
+        <div className={styles.body}>
+          <aside className={styles.side}>{list}</aside>
+          <main className={styles.main}>{detail}</main>
+        </div>
       </div>
     </div>
   );
