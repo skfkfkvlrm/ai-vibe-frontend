@@ -287,3 +287,28 @@
   gap: 10px;
   margin-top: 24px;
 }
+
+/* 언어 선택 */
+.headerText {
+  flex: 1;
+  min-width: 0;
+}
+
+.langPicker select {
+  padding: 6px 10px;
+  font: inherit;
+  color: var(--sumi);
+  background: #fffdf7;
+  border: 1px solid var(--kin);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

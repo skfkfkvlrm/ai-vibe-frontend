@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useI18n } from "../_i18n/I18n";
 import styles from "../japan/japan.module.css";
 
 type Kind = "alert" | "confirm";
@@ -30,6 +31,7 @@ export function useModal(): ModalApi {
 }
 
 export default function ModalProvider({ children }: { children: React.ReactNode }) {
+  const { t } = useI18n();
   const [current, setCurrent] = useState<Current | null>(null);
   const currentRef = useRef<Current | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -93,11 +95,11 @@ export default function ModalProvider({ children }: { children: React.ReactNode 
           <div className={styles.modalActions}>
             {current.kind === "confirm" && (
               <button type="button" className={styles.buttonGhost} onClick={() => close(false)}>
-                취소
+                {t("action.cancel")}
               </button>
             )}
             <button type="button" className={styles.button} autoFocus onClick={() => close(true)}>
-              확인
+              {t("action.confirm")}
             </button>
           </div>
         </dialog>

@@ -1,4 +1,5 @@
 import ModalProvider from "../_components/ModalProvider";
+import SiteHeader from "../_components/SiteHeader";
 import styles from "./japan.module.css";
 
 export default function JapanLayout({
@@ -12,19 +13,13 @@ export default function JapanLayout({
   return (
     <div className={styles.page}>
       <ModalProvider>
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <span className={styles.sun} aria-hidden="true" />
-          <div>
-            <h1 className={styles.title}>hello-japan</h1>
-            <p className={styles.subtitle}>日本 旅行地 案内</p>
+        <div className={styles.container}>
+          <SiteHeader />
+          <div className={styles.body}>
+            <aside className={styles.side}>{list}</aside>
+            <main className={styles.main}>{detail}</main>
           </div>
-        </header>
-        <div className={styles.body}>
-          <aside className={styles.side}>{list}</aside>
-          <main className={styles.main}>{detail}</main>
         </div>
-      </div>
       </ModalProvider>
     </div>
   );

@@ -17,6 +17,6 @@ export async function api(
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error ?? "요청에 실패했습니다.");
+  if (!res.ok) throw new Error(data.error ?? "generic"); // 서버가 내려주는 오류 코드(번역은 tError)
   return data;
 }

@@ -20,25 +20,25 @@ function text(v: unknown, max: number): string | null {
 
 export function parseInput(body: unknown): Result {
   if (typeof body !== "object" || body === null || Array.isArray(body)) {
-    return { ok: false, error: "잘못된 요청 형식입니다." };
+    return { ok: false, error: "bad_request" };
   }
   const obj = body as Record<string, unknown>;
   for (const k of Object.keys(obj)) {
     if (!ALLOWED_KEYS.has(k)) {
-      return { ok: false, error: `허용되지 않은 필드: ${k}` };
+      return { ok: false, error: "bad_key" };
     }
   }
   const name = text(obj.name, 30);
   const sea = text(obj.sea, 200);
   const eat = text(obj.eat, 200);
   const picture = typeof obj.picture === "string" ? obj.picture.trim() : "";
-  if (!name) return { ok: false, error: "여행지명은 1~30자여야 합니다." };
-  if (!sea) return { ok: false, error: "볼거리는 1~200자여야 합니다." };
-  if (!eat) return { ok: false, error: "먹거리는 1~200자여야 합니다." };
+  if (!name) return { ok: false, error: "bad_name" };
+  if (!sea) return { ok: false, error: "bad_sea" };
+  if (!eat) return { ok: false, error: "bad_eat" };
   if (!PICTURE_RE.test(picture)) {
     return {
       ok: false,
-      error: "사진은 /images/파일명.jpg(png, webp) 형식이어야 합니다.",
+      error: "bad_picture",
     };
   }
   return { ok: true, value: { name, sea, eat, picture } };

@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import type { Destination } from "../api/japan/data";
 import styles from "../japan/japan.module.css";
+import { useI18n } from "../_i18n/I18n";
 import { CHANGED_EVENT, api, notifyChanged } from "./events";
 
 // 목록은 라우트 핸들러(GET /api/japan)에서 가져온다.
 export default function DestinationList() {
   const router = useRouter();
+  const { t } = useI18n();
   const [items, setItems] = useState<Destination[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [admin, setAdmin] = useState(false);
@@ -46,12 +48,12 @@ export default function DestinationList() {
   }
 
   return (
-    <nav aria-label="여행지 목록">
-      <h2 className={styles.listTitle}>여행지 목록</h2>
+    <nav aria-label={t("list.title")}>
+      <h2 className={styles.listTitle}>{t("list.title")}</h2>
       {failed ? (
-        <p className={styles.error}>목록을 불러오지 못했습니다.</p>
+        <p className={styles.error}>{t("list.failed")}</p>
       ) : !items ? (
-        <p className={styles.message}>불러오는 중…</p>
+        <p className={styles.message}>{t("list.loading")}</p>
       ) : (
         <ul className={styles.list}>
           {items.map((d) => (
@@ -67,15 +69,15 @@ export default function DestinationList() {
         {admin ? (
           <>
             <Link href="/japan/new" className={styles.button}>
-              + 새 여행지
+              {t("list.add")}
             </Link>
             <button type="button" className={styles.buttonGhost} onClick={logout}>
-              로그아웃
+              {t("list.logout")}
             </button>
           </>
         ) : (
           <Link href="/japan/login" className={styles.buttonGhost}>
-            관리자 로그인
+            {t("list.login")}
           </Link>
         )}
       </div>

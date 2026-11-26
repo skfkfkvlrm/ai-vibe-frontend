@@ -73,8 +73,8 @@ export function json(body: unknown, status = 200): NextResponse {
 
 /** 변경(POST/PUT/DELETE) 요청 가드. 통과하면 null, 아니면 오류 응답. */
 export function guardWrite(req: NextRequest): NextResponse | null {
-  if (!isSameOrigin(req)) return json({ error: "허용되지 않은 요청입니다." }, 403);
-  if (!isAdmin(req)) return json({ error: "로그인이 필요합니다." }, 401);
+  if (!isSameOrigin(req)) return json({ error: "forbidden" }, 403);
+  if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
   return null;
 }
 

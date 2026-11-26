@@ -1,0 +1,254 @@
+export const LOCALES = ["ko", "en", "ja", "zh"] as const;
+export type Locale = (typeof LOCALES)[number];
+export const DEFAULT_LOCALE: Locale = "ko";
+
+// 언어 선택기에 표시할 각 언어의 자국어 이름, <html lang> 값
+export const LOCALE_LABEL: Record<Locale, string> = {
+  ko: "한국어",
+  en: "English",
+  ja: "日本語",
+  zh: "中文",
+};
+export const HTML_LANG: Record<Locale, string> = {
+  ko: "ko",
+  en: "en",
+  ja: "ja",
+  zh: "zh-CN",
+};
+
+const ko = {
+  "lang.label": "언어",
+  "site.subtitle": "日本 旅行地 案内",
+
+  "list.title": "여행지 목록",
+  "list.loading": "불러오는 중…",
+  "list.failed": "목록을 불러오지 못했습니다.",
+  "list.add": "+ 새 여행지",
+  "list.login": "관리자 로그인",
+  "list.logout": "로그아웃",
+
+  "detail.pick": "왼쪽 목록에서 여행지를 선택하세요.",
+  "detail.sea": "볼거리",
+  "detail.eat": "먹거리",
+  "detail.notFound": "존재하지 않는 여행지입니다.",
+  "detail.photoAlt": "{name} 풍경",
+
+  "form.newTitle": "새 여행지",
+  "form.editTitle": "여행지 수정",
+  "form.name": "여행지명",
+  "form.sea": "볼거리",
+  "form.eat": "먹거리",
+  "form.picture": "사진 경로",
+  "form.pictureHint": "/images/파일명.jpg 형식 (jpg, jpeg, png, webp)",
+
+  "login.title": "관리자 로그인",
+  "login.password": "비밀번호",
+
+  "action.edit": "수정",
+  "action.delete": "삭제",
+  "action.save": "저장",
+  "action.saving": "저장 중…",
+  "action.login": "로그인",
+  "action.checking": "확인 중…",
+  "action.cancel": "취소",
+  "action.confirm": "확인",
+  "action.deleteConfirm": "정말 삭제하시겠습니까?",
+  "action.deleted": "삭제되었습니다.",
+  "action.saved": "저장되었습니다.",
+
+  "err.generic": "요청에 실패했습니다.",
+  "err.network": "네트워크 오류가 발생했습니다.",
+  "err.forbidden": "허용되지 않은 요청입니다.",
+  "err.unauthorized": "로그인이 필요합니다.",
+  "err.bad_request": "잘못된 요청 형식입니다.",
+  "err.bad_key": "허용되지 않은 필드가 포함되어 있습니다.",
+  "err.bad_name": "여행지명은 1~30자여야 합니다.",
+  "err.bad_sea": "볼거리는 1~200자여야 합니다.",
+  "err.bad_eat": "먹거리는 1~200자여야 합니다.",
+  "err.bad_picture": "사진은 /images/파일명.jpg(png, webp) 형식이어야 합니다.",
+  "err.bad_id": "잘못된 id입니다.",
+  "err.not_found": "찾을 수 없습니다.",
+  "err.too_many": "시도 횟수를 초과했습니다. 잠시 후 다시 시도하세요.",
+  "err.auth_failed": "인증에 실패했습니다.",
+  "err.server_config": "서버 설정 오류입니다.",
+} as const;
+
+export type MessageKey = keyof typeof ko;
+type Dict = Record<MessageKey, string>;
+
+const en: Dict = {
+  "lang.label": "Language",
+  "site.subtitle": "Japan Travel Guide",
+
+  "list.title": "Destinations",
+  "list.loading": "Loading…",
+  "list.failed": "Failed to load the list.",
+  "list.add": "+ New destination",
+  "list.login": "Admin login",
+  "list.logout": "Log out",
+
+  "detail.pick": "Select a destination from the list on the left.",
+  "detail.sea": "Sights",
+  "detail.eat": "Local food",
+  "detail.notFound": "This destination does not exist.",
+  "detail.photoAlt": "Scenery of {name}",
+
+  "form.newTitle": "New destination",
+  "form.editTitle": "Edit destination",
+  "form.name": "Name",
+  "form.sea": "Sights",
+  "form.eat": "Local food",
+  "form.picture": "Picture path",
+  "form.pictureHint": "Format: /images/filename.jpg (jpg, jpeg, png, webp)",
+
+  "login.title": "Admin login",
+  "login.password": "Password",
+
+  "action.edit": "Edit",
+  "action.delete": "Delete",
+  "action.save": "Save",
+  "action.saving": "Saving…",
+  "action.login": "Log in",
+  "action.checking": "Checking…",
+  "action.cancel": "Cancel",
+  "action.confirm": "OK",
+  "action.deleteConfirm": "Are you sure you want to delete this?",
+  "action.deleted": "Deleted.",
+  "action.saved": "Saved.",
+
+  "err.generic": "The request failed.",
+  "err.network": "A network error occurred.",
+  "err.forbidden": "This request is not allowed.",
+  "err.unauthorized": "Please log in first.",
+  "err.bad_request": "Invalid request format.",
+  "err.bad_key": "The request contains a field that is not allowed.",
+  "err.bad_name": "The name must be 1–30 characters.",
+  "err.bad_sea": "Sights must be 1–200 characters.",
+  "err.bad_eat": "Local food must be 1–200 characters.",
+  "err.bad_picture": "The picture must look like /images/filename.jpg (png, webp).",
+  "err.bad_id": "Invalid id.",
+  "err.not_found": "Not found.",
+  "err.too_many": "Too many attempts. Please try again later.",
+  "err.auth_failed": "Authentication failed.",
+  "err.server_config": "Server configuration error.",
+};
+
+const ja: Dict = {
+  "lang.label": "言語",
+  "site.subtitle": "日本 旅行地 案内",
+
+  "list.title": "旅行地一覧",
+  "list.loading": "読み込み中…",
+  "list.failed": "一覧を読み込めませんでした。",
+  "list.add": "+ 新しい旅行地",
+  "list.login": "管理者ログイン",
+  "list.logout": "ログアウト",
+
+  "detail.pick": "左の一覧から旅行地を選んでください。",
+  "detail.sea": "見どころ",
+  "detail.eat": "グルメ",
+  "detail.notFound": "存在しない旅行地です。",
+  "detail.photoAlt": "{name}の風景",
+
+  "form.newTitle": "新しい旅行地",
+  "form.editTitle": "旅行地を編集",
+  "form.name": "旅行地名",
+  "form.sea": "見どころ",
+  "form.eat": "グルメ",
+  "form.picture": "写真のパス",
+  "form.pictureHint": "/images/ファイル名.jpg の形式（jpg, jpeg, png, webp）",
+
+  "login.title": "管理者ログイン",
+  "login.password": "パスワード",
+
+  "action.edit": "編集",
+  "action.delete": "削除",
+  "action.save": "保存",
+  "action.saving": "保存中…",
+  "action.login": "ログイン",
+  "action.checking": "確認中…",
+  "action.cancel": "キャンセル",
+  "action.confirm": "OK",
+  "action.deleteConfirm": "本当に削除しますか？",
+  "action.deleted": "削除しました。",
+  "action.saved": "保存しました。",
+
+  "err.generic": "リクエストに失敗しました。",
+  "err.network": "ネットワークエラーが発生しました。",
+  "err.forbidden": "許可されていないリクエストです。",
+  "err.unauthorized": "ログインが必要です。",
+  "err.bad_request": "リクエストの形式が正しくありません。",
+  "err.bad_key": "許可されていない項目が含まれています。",
+  "err.bad_name": "旅行地名は1〜30文字で入力してください。",
+  "err.bad_sea": "見どころは1〜200文字で入力してください。",
+  "err.bad_eat": "グルメは1〜200文字で入力してください。",
+  "err.bad_picture": "写真は /images/ファイル名.jpg（png, webp）の形式にしてください。",
+  "err.bad_id": "不正なIDです。",
+  "err.not_found": "見つかりません。",
+  "err.too_many": "試行回数が上限を超えました。しばらくしてからお試しください。",
+  "err.auth_failed": "認証に失敗しました。",
+  "err.server_config": "サーバー設定エラーです。",
+};
+
+const zh: Dict = {
+  "lang.label": "语言",
+  "site.subtitle": "日本 旅游指南",
+
+  "list.title": "旅游地列表",
+  "list.loading": "加载中…",
+  "list.failed": "无法加载列表。",
+  "list.add": "+ 新增旅游地",
+  "list.login": "管理员登录",
+  "list.logout": "退出登录",
+
+  "detail.pick": "请从左侧列表中选择旅游地。",
+  "detail.sea": "景点",
+  "detail.eat": "美食",
+  "detail.notFound": "该旅游地不存在。",
+  "detail.photoAlt": "{name}风景",
+
+  "form.newTitle": "新增旅游地",
+  "form.editTitle": "编辑旅游地",
+  "form.name": "旅游地名称",
+  "form.sea": "景点",
+  "form.eat": "美食",
+  "form.picture": "图片路径",
+  "form.pictureHint": "格式：/images/文件名.jpg（jpg, jpeg, png, webp）",
+
+  "login.title": "管理员登录",
+  "login.password": "密码",
+
+  "action.edit": "编辑",
+  "action.delete": "删除",
+  "action.save": "保存",
+  "action.saving": "保存中…",
+  "action.login": "登录",
+  "action.checking": "验证中…",
+  "action.cancel": "取消",
+  "action.confirm": "确定",
+  "action.deleteConfirm": "确定要删除吗？",
+  "action.deleted": "已删除。",
+  "action.saved": "已保存。",
+
+  "err.generic": "请求失败。",
+  "err.network": "发生网络错误。",
+  "err.forbidden": "不允许的请求。",
+  "err.unauthorized": "请先登录。",
+  "err.bad_request": "请求格式不正确。",
+  "err.bad_key": "请求包含不允许的字段。",
+  "err.bad_name": "名称须为1~30个字符。",
+  "err.bad_sea": "景点须为1~200个字符。",
+  "err.bad_eat": "美食须为1~200个字符。",
+  "err.bad_picture": "图片须为 /images/文件名.jpg（png, webp）格式。",
+  "err.bad_id": "无效的 id。",
+  "err.not_found": "未找到。",
+  "err.too_many": "尝试次数过多，请稍后再试。",
+  "err.auth_failed": "认证失败。",
+  "err.server_config": "服务器配置错误。",
+};
+
+export const MESSAGES: Record<Locale, Dict> = { ko, en, ja, zh };
+
+export function isLocale(v: unknown): v is Locale {
+  return typeof v === "string" && (LOCALES as readonly string[]).includes(v);
+}

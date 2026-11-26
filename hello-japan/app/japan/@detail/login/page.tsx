@@ -3,12 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api, notifyChanged } from "../../../_components/events";
+import { useI18n } from "../../../_i18n/I18n";
 import { useModal } from "../../../_components/ModalProvider";
 import styles from "../../japan.module.css";
 
 export default function LoginPage() {
   const router = useRouter();
   const { alert } = useModal();
+  const { t, tError } = useI18n();
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -21,15 +23,15 @@ export default function LoginPage() {
       router.push("/japan");
     } catch (err) {
       setBusy(false);
-      await alert(err instanceof Error ? err.message : "로그인에 실패했습니다.");
+      await alert(tError(err));
     }
   }
 
   return (
     <form className={styles.card} onSubmit={onSubmit}>
-      <h2 className={styles.cardTitle}>관리자 로그인</h2>
+      <h2 className={styles.cardTitle}>{t("login.title")}</h2>
       <label className={styles.field}>
-        비밀번호
+        {t("login.password")}
         <input
           name="password"
           type="password"
@@ -40,7 +42,7 @@ export default function LoginPage() {
       </label>
       <div className={styles.actions}>
         <button type="submit" className={styles.button} disabled={busy}>
-          {busy ? "확인 중…" : "로그인"}
+          {busy ? t("action.checking") : t("action.login")}
         </button>
       </div>
     </form>

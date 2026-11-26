@@ -29,11 +29,11 @@ function blocked(key: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
-  if (!isSameOrigin(req)) return json({ error: "허용되지 않은 요청입니다." }, 403);
+  if (!isSameOrigin(req)) return json({ error: "forbidden" }, 403);
 
   const key = clientKey(req);
   if (blocked(key)) {
-    return json({ error: "시도 횟수를 초과했습니다. 잠시 후 다시 시도하세요." }, 429);
+    return json({ error: "too_many" }, 429);
   }
 
   const body = await readJson(req);
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const f = fails.get(key);
     fails.set(key, f ? { ...f, count: f.count + 1 } : { count: 1, first: Date.now() });
     await new Promise((r) => setTimeout(r, 400));
-    return json({ error: "인증에 실패했습니다." }, 401);
+    return json({ error: "auth_failed" }, 401);
   }
 
   fails.delete(key);
@@ -62,6 +62,6 @@ export async function POST(req: NextRequest) {
     return res;
   } catch {
     // 서버 설정 오류 — 상세 내용은 노출하지 않는다.
-    return json({ error: "서버 설정 오류입니다." }, 500);
+    return json({ error: "server_config" }, 500);
   }
 }

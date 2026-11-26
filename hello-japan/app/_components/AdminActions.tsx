@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "../japan/japan.module.css";
+import { useI18n } from "../_i18n/I18n";
 import { api, notifyChanged } from "./events";
 import { useModal } from "./ModalProvider";
 
@@ -11,6 +12,7 @@ import { useModal } from "./ModalProvider";
 export default function AdminActions({ id }: { id: number }) {
   const router = useRouter();
   const { alert, confirm } = useModal();
+  const { t, tError } = useI18n();
   const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
@@ -23,25 +25,25 @@ export default function AdminActions({ id }: { id: number }) {
   if (!admin) return null;
 
   async function onDelete() {
-    if (!(await confirm("정말 삭제하시겠습니까?"))) return;
+    if (!(await confirm(t("action.deleteConfirm")))) return;
     try {
       await api(`/api/japan/${id}`, "DELETE");
     } catch (e) {
-      await alert(e instanceof Error ? e.message : "삭제에 실패했습니다.");
+      await alert(tError(e));
       return;
     }
     notifyChanged();
     router.push("/japan");
-    await alert("삭제되었습니다.");
+    await alert(t("action.deleted"));
   }
 
   return (
     <div className={styles.actions}>
       <Link href={`/japan/${id}/edit`} className={styles.button}>
-        수정
+        {t("action.edit")}
       </Link>
       <button type="button" className={styles.buttonDanger} onClick={onDelete}>
-        삭제
+        {t("action.delete")}
       </button>
     </div>
   );
