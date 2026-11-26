@@ -17,6 +17,9 @@ export async function POST(request: Request) {
         director: body.director,
         actor: body.actor ?? '',
         count: body.count,
+        releaseDate: body.releaseDate ?? '',
+        country: body.country ?? '',
+        company: body.company ?? '',
     };
     movie.push(newMovie);
     return new Response(JSON.stringify(newMovie), {

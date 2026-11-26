@@ -6,6 +6,9 @@ export const movie = [
         director: '크리스토퍼 놀란',
         actor: '맷 데이먼, 톰 홀랜드, 앤 해서웨이, 로버트 패틴슨, 젠데이아',
         count: '12,366,732',
+        releaseDate: '2026-08-05',
+        country: '미국, 영국',
+        company: '신카피',
     },
     {
         id: 2,
@@ -13,7 +16,10 @@ export const movie = [
         title: '왕과 사는 남자',
         director: '장항준',
         actor: '유해진, 박지훈, 유지태, 전미도, 김민',
-        count: '16,935,161'
+        count: '16,935,161',
+        releaseDate: '2026-02-04',
+        country: '대한민국',
+        company: '온다웍스, 비에이엔터테인먼트',
     },
     {
         id: 3,
@@ -21,7 +27,10 @@ export const movie = [
         title: '스파이더맨: 브랜드 뉴 데이',
         director: '데스틴 대니얼 크레턴',
         actor: '톰 홀랜드, 젠데이아, 세이디 싱크, 제이콥 배덜런, 마크 러팔로',
-        count: '9,050,000'
+        count: '9,050,000',
+        releaseDate: '2026-07-29',
+        country: '미국',
+        company: '컬럼비아 픽처스, 파스칼 픽처스, 마블 스튜디오',
     },
     {
         id: 4,
@@ -29,7 +38,10 @@ export const movie = [
         title: '군체',
         director: '연상호',
         actor: '전지현, 구교환, 지창욱, 신현빈, 김신록, 고수',
-        count: '5,950,000'
+        count: '5,950,000',
+        releaseDate: '2026-05-21',
+        country: '대한민국',
+        company: '와우포인트, 스마일게이트',
     },
     {
         id: 5,
@@ -37,7 +49,10 @@ export const movie = [
         title: '호프',
         director: '나홍진',
         actor: '황정민, 조인성, 정호연, 마이클 패스벤더, 알리시아 비칸데르',
-        count: '4,600,000'
+        count: '4,600,000',
+        releaseDate: '2026-07-15',
+        country: '대한민국',
+        company: '포지드필름스, 플러스엠, (주)웨스트월드',
     },
     {
         id: 6,
@@ -45,7 +60,10 @@ export const movie = [
         title: '암살자(들)',
         director: '허진호',
         actor: '유해진, 박해일, 이민호',
-        count: '3,490,000'
+        count: '3,490,000',
+        releaseDate: '2026-09-23',
+        country: '대한민국',
+        company: '하이브미디어코프',
     },
     {
         id: 7,
@@ -53,7 +71,10 @@ export const movie = [
         title: '살목지',
         director: '이상민',
         actor: '김혜윤, 이종원, 김준한, 김영성, 오동민',
-        count: '3,240,000'
+        count: '3,240,000',
+        releaseDate: '2026-04-08',
+        country: '대한민국',
+        company: '더램프',
     },
     {
         id: 8,
@@ -61,7 +82,10 @@ export const movie = [
         title: '극장판 치이카와: 인어 섬의 비밀',
         director: '오이카와 케이',
         actor: '아오키 하루카, 타나카 마코토, 오자와 아리, 이구치 유카, 우치다 유우마',
-        count: '3,060,000'
+        count: '3,060,000',
+        releaseDate: '2026-09-30',
+        country: '일본',
+        company: '사이픽',
     },
     {
         id: 9,
@@ -69,7 +93,10 @@ export const movie = [
         title: '토이 스토리 5',
         director: '앤드류 스탠튼',
         actor: '톰 행크스, 팀 앨런, 조안 쿠삭, 그레타 리, 스칼렛 스피어스',
-        count: '2,950,000'
+        count: '2,950,000',
+        releaseDate: '2026-06-17',
+        country: '미국',
+        company: '월트 디즈니 픽처스, 픽사 애니메이션 스튜디오',
     },
     {
         id: 10,
@@ -77,6 +104,9 @@ export const movie = [
         title: '프로젝트 헤일메리',
         director: '필 로드 & 크리스토퍼 밀러',
         actor: '라이언 고슬링, 산드라 휠러',
-        count: '2,910,000'
+        count: '2,910,000',
+        releaseDate: '2026-03-18',
+        country: '미국',
+        company: '메트로 골드윈 메이어, 로드 밀러 프로덕션, 파스칼 픽처스',
     }
 ]

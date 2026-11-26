@@ -21,9 +21,16 @@ async function MovieDetail({ params }: Props) {
                 <img src={m.poster} alt={`${m.title} 포스터`}
                     className="aspect-[200/285] w-[200px] shrink-0 rounded-xl object-cover shadow-lg" />
                 <div className="flex-1">
-                    <h1 className="mb-1 text-3xl font-bold leading-snug">{m.title}</h1>
-                    <p className="mb-6 font-medium text-blue-600">누적 관객 {m.count}명</p>
-                    <dl className="grid grid-cols-[80px_1fr] gap-y-3">
+                    <h1 className="mb-6 text-3xl font-bold leading-snug">{m.title}</h1>
+                    <dl className="grid grid-cols-[90px_1fr] gap-y-3">
+                        <dt className="opacity-60">관객 수</dt>
+                        <dd className="font-medium text-blue-600">{m.count}명</dd>
+                        <dt className="opacity-60">개봉일</dt>
+                        <dd>{m.releaseDate}</dd>
+                        <dt className="opacity-60">제작 국가</dt>
+                        <dd>{m.country}</dd>
+                        <dt className="opacity-60">제작사</dt>
+                        <dd>{m.company}</dd>
                         <dt className="opacity-60">감독</dt>
                         <dd>{m.director}</dd>
                         <dt className="opacity-60">주연</dt>
