@@ -79,7 +79,7 @@ export default function MoviePage() {
                     onSaved={() => { setQuery(''); loadMovies(); }} />
             )}
             <div className="mb-8 flex gap-2">
-                <input type="text" placeholder="제목 또는 감독을 입력해주세요."
+                <input type="text" placeholder="제목, 감독 또는 배우를 입력해주세요."
                     value={query} onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') searchMovie(); }}
                     className="flex-1 rounded-lg border border-gray-400/60 bg-transparent px-3 py-2 outline-none focus:border-blue-500" />

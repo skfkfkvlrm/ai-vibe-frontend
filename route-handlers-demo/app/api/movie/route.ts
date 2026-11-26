@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
         const query = request.nextUrl.searchParams.get("query");
         if (query && query.length > 100) return fail(400, "Bad Request");
         const filteredMovies = query ? movie.filter(
-            (m) => m.title.includes(query) || m.director.includes(query)) : movie;
+            (m) => m.title.includes(query) || m.director.includes(query) || m.actor.includes(query)) : movie;
         return Response.json(filteredMovies);
     } catch (err) {
         logError("movie.GET", err);
