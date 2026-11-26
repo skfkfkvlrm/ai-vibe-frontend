@@ -6,12 +6,13 @@ import { useCallback, useEffect, useState } from "react";
 import type { Destination } from "../api/japan/data";
 import styles from "../japan/japan.module.css";
 import { useI18n } from "../_i18n/I18n";
+import { localize } from "../_i18n/localize";
 import { CHANGED_EVENT, api, notifyChanged } from "./events";
 
 // 목록은 라우트 핸들러(GET /api/japan)에서 가져온다.
 export default function DestinationList() {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [items, setItems] = useState<Destination[] | null>(null);
   const [failed, setFailed] = useState(false);
   const [admin, setAdmin] = useState(false);
@@ -59,7 +60,7 @@ export default function DestinationList() {
           {items.map((d) => (
             <li key={d.id}>
               <Link href={`/japan/${d.id}`} className={styles.link}>
-                {d.name}
+                {localize(d, locale).name}
               </Link>
             </li>
           ))}

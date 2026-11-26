@@ -40,6 +40,12 @@ const ko = {
   "form.eat": "먹거리",
   "form.picture": "사진 경로",
   "form.pictureHint": "/images/파일명.jpg 형식 (jpg, jpeg, png, webp)",
+  "form.translateBtn": "자동 번역",
+  "form.translating": "번역 중…",
+  "form.translateHelp": "한국어 내용을 기준으로 번역합니다. 비워 두면 한국어가 표시됩니다.",
+  "form.translateOverwrite": "이미 입력된 번역이 있습니다. 덮어쓸까요?",
+  "form.translateDone": "번역이 채워졌습니다. 저장하기 전에 내용을 확인하세요.",
+  "form.needKorean": "먼저 한국어 탭의 여행지명·볼거리·먹거리를 입력하세요.",
 
   "login.title": "관리자 로그인",
   "login.password": "비밀번호",
@@ -71,6 +77,9 @@ const ko = {
   "err.too_many": "시도 횟수를 초과했습니다. 잠시 후 다시 시도하세요.",
   "err.auth_failed": "인증에 실패했습니다.",
   "err.server_config": "서버 설정 오류입니다.",
+  "err.bad_i18n": "번역 내용이 올바르지 않습니다.",
+  "err.translate_unavailable": "자동 번역을 사용할 수 없습니다. 서버에 API 키가 설정되지 않았습니다.",
+  "err.translate_failed": "자동 번역에 실패했습니다. 잠시 후 다시 시도하세요.",
 } as const;
 
 export type MessageKey = keyof typeof ko;
@@ -100,6 +109,12 @@ const en: Dict = {
   "form.eat": "Local food",
   "form.picture": "Picture path",
   "form.pictureHint": "Format: /images/filename.jpg (jpg, jpeg, png, webp)",
+  "form.translateBtn": "Auto-translate",
+  "form.translating": "Translating…",
+  "form.translateHelp": "Translates from the Korean text. If left empty, Korean is shown.",
+  "form.translateOverwrite": "Existing translations will be overwritten. Continue?",
+  "form.translateDone": "Translations filled in. Please review them before saving.",
+  "form.needKorean": "Fill in the name, sights, and food on the Korean tab first.",
 
   "login.title": "Admin login",
   "login.password": "Password",
@@ -131,6 +146,9 @@ const en: Dict = {
   "err.too_many": "Too many attempts. Please try again later.",
   "err.auth_failed": "Authentication failed.",
   "err.server_config": "Server configuration error.",
+  "err.bad_i18n": "The translation content is invalid.",
+  "err.translate_unavailable": "Auto-translation is unavailable: no API key is configured on the server.",
+  "err.translate_failed": "Auto-translation failed. Please try again later.",
 };
 
 const ja: Dict = {
@@ -157,6 +175,12 @@ const ja: Dict = {
   "form.eat": "グルメ",
   "form.picture": "写真のパス",
   "form.pictureHint": "/images/ファイル名.jpg の形式（jpg, jpeg, png, webp）",
+  "form.translateBtn": "自動翻訳",
+  "form.translating": "翻訳中…",
+  "form.translateHelp": "韓国語の内容を基に翻訳します。空欄の場合は韓国語が表示されます。",
+  "form.translateOverwrite": "入力済みの翻訳があります。上書きしますか？",
+  "form.translateDone": "翻訳を入力しました。保存前に内容を確認してください。",
+  "form.needKorean": "まず韓国語タブの旅行地名・見どころ・グルメを入力してください。",
 
   "login.title": "管理者ログイン",
   "login.password": "パスワード",
@@ -188,6 +212,9 @@ const ja: Dict = {
   "err.too_many": "試行回数が上限を超えました。しばらくしてからお試しください。",
   "err.auth_failed": "認証に失敗しました。",
   "err.server_config": "サーバー設定エラーです。",
+  "err.bad_i18n": "翻訳内容が正しくありません。",
+  "err.translate_unavailable": "自動翻訳は利用できません。サーバーにAPIキーが設定されていません。",
+  "err.translate_failed": "自動翻訳に失敗しました。しばらくしてからお試しください。",
 };
 
 const zh: Dict = {
@@ -214,6 +241,12 @@ const zh: Dict = {
   "form.eat": "美食",
   "form.picture": "图片路径",
   "form.pictureHint": "格式：/images/文件名.jpg（jpg, jpeg, png, webp）",
+  "form.translateBtn": "自动翻译",
+  "form.translating": "翻译中…",
+  "form.translateHelp": "以韩语内容为基础翻译。留空则显示韩语。",
+  "form.translateOverwrite": "已有翻译内容，是否覆盖？",
+  "form.translateDone": "已填入翻译，保存前请确认内容。",
+  "form.needKorean": "请先在韩语标签中填写名称、景点和美食。",
 
   "login.title": "管理员登录",
   "login.password": "密码",
@@ -245,6 +278,9 @@ const zh: Dict = {
   "err.too_many": "尝试次数过多，请稍后再试。",
   "err.auth_failed": "认证失败。",
   "err.server_config": "服务器配置错误。",
+  "err.bad_i18n": "翻译内容无效。",
+  "err.translate_unavailable": "无法使用自动翻译：服务器未配置 API 密钥。",
+  "err.translate_failed": "自动翻译失败，请稍后再试。",
 };
 
 export const MESSAGES: Record<Locale, Dict> = { ko, en, ja, zh };
