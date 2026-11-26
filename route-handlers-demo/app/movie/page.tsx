@@ -74,7 +74,6 @@ export default function MoviePage() {
                                 <h3 className="text-base font-semibold leading-snug">{m.title}</h3>
                                 <p className="opacity-70">감독 · {m.director}</p>
                                 <p className="opacity-70">주연 · {m.actor}</p>
-                                <p className="mt-auto pt-1 font-medium text-blue-600">관객 {m.count}명</p>
                             </div>
                         </Link>
                     </li>

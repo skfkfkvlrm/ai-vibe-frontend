@@ -8,7 +8,7 @@ export const movie = [
         count: '12,366,732',
         releaseDate: '2026-08-05',
         country: '미국, 영국',
-        company: '신카피',
+        company: 'Syncopy',
     },
     {
         id: 2,
@@ -30,7 +30,7 @@ export const movie = [
         count: '9,050,000',
         releaseDate: '2026-07-29',
         country: '미국',
-        company: '컬럼비아 픽처스, 파스칼 픽처스, 마블 스튜디오',
+        company: 'Columbia Pictures, Pascal Pictures, Marvel Studios',
     },
     {
         id: 4,
@@ -96,7 +96,7 @@ export const movie = [
         count: '2,950,000',
         releaseDate: '2026-06-17',
         country: '미국',
-        company: '월트 디즈니 픽처스, 픽사 애니메이션 스튜디오',
+        company: 'Walt Disney Pictures, Pixar Animation Studios',
     },
     {
         id: 10,
@@ -107,6 +107,6 @@ export const movie = [
         count: '2,910,000',
         releaseDate: '2026-03-18',
         country: '미국',
-        company: '메트로 골드윈 메이어, 로드 밀러 프로덕션, 파스칼 픽처스',
+        company: 'Metro-Goldwyn-Mayer, Lord Miller Productions, Pascal Pictures',
     }
 ]
