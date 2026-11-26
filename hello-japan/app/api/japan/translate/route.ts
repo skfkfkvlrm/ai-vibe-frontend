@@ -3,7 +3,7 @@ import { guardWrite, json, readJson } from "../../_lib/auth";
 import { parseTranslateSource, parseTranslations } from "../validate";
 
 // 환경변수는 서버 신뢰 값. 모델/엔드포인트는 필요 시 교체 가능(테스트용 BASE_URL 포함).
-const MODEL = process.env.GEMINI_MODEL ?? "gemini-3.5-flash-lite";
+const MODEL = process.env.GEMINI_MODEL ?? "gemini-3.5-flash";
 const BASE_URL =
   process.env.GEMINI_BASE_URL ?? "https://generativelanguage.googleapis.com";
 const API_URL = `${BASE_URL}/v1beta/models/${encodeURIComponent(MODEL)}:generateContent`;
@@ -60,14 +60,22 @@ export async function POST(req: NextRequest) {
           { role: "user", parts: [{ text: JSON.stringify(src.value) }] },
         ],
         generationConfig: {
-          responseFormat: {
-            text: { mimeType: "APPLICATION_JSON", schema: RESPONSE_SCHEMA },
-          },
+          responseMimeType: "application/json",
+          responseJsonSchema: RESPONSE_SCHEMA,
+          // 번역에는 추론이 필요 없다. 끄지 않으면 thinking 토큰 때문에 8~28초 걸린다(실측: 최소화 시 1.5~4.5초).
+          thinkingConfig: { thinkingLevel: "minimal" },
         },
       }),
       signal: AbortSignal.timeout(20_000),
     });
-    if (!res.ok) return json({ error: "translate_failed" }, 502);
+    if (!res.ok) {
+      // 운영 진단용: 상태 코드만 기록(요청/응답 본문·키는 기록하지 않는다).
+      const status = ((await res.json().catch(() => null)) as { error?: { status?: string } } | null)?.error?.status;
+      console.error(`[translate] upstream HTTP ${res.status} ${status ?? ""}`);
+      // 호출 한도 초과(429)는 "잠시 후 다시 시도" 안내로 구분한다.
+      if (res.status === 429) return json({ error: "too_many" }, 429);
+      return json({ error: "translate_failed" }, 502);
+    }
 
     const data = (await res.json()) as GeminiResponse;
     const raw = data.candidates?.[0]?.content?.parts
@@ -75,11 +83,15 @@ export async function POST(req: NextRequest) {
       .join("");
     // 외부 모델 출력도 신뢰하지 않고 저장 입력과 동일한 규칙(길이·제어문자·키)으로 검증한다.
     const translations = parseTranslations(raw ? JSON.parse(raw) : undefined, true);
-    if (!translations) return json({ error: "translate_failed" }, 502);
+    if (!translations) {
+      console.error("[translate] model output failed validation");
+      return json({ error: "translate_failed" }, 502);
+    }
 
     return json(translations);
-  } catch {
-    // 상세 오류(키/업스트림 응답/JSON 파싱)는 노출하지 않는다.
+  } catch (e) {
+    // 클라이언트에는 상세 오류(키/업스트림 응답/JSON 파싱)를 노출하지 않는다.
+    console.error(`[translate] ${e instanceof Error ? e.name : "error"}`);
     return json({ error: "translate_failed" }, 502);
   }
 }
