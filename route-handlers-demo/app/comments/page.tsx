@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 interface Comment {
     id: number;
     text: string;
@@ -64,7 +65,7 @@ export default function CommentsPage() {
                     </li>
                 ))}
             </ul>
-            <button><a href="/">돌아가기</a></button>
+            <button><Link href="/">돌아가기</Link></button>
         </div >
     );
 }

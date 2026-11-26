@@ -2,9 +2,11 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../AuthProvider";
 
 export default function LoginPage() {
     const router = useRouter();
+    const { refresh } = useAuth();
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -20,6 +22,7 @@ export default function LoginPage() {
         });
 
         if (response.ok) {
+            await refresh();
             router.push("/movie");
         } else if (response.status === 401) {
             setError("아이디 또는 비밀번호가 올바르지 않습니다");
@@ -32,6 +35,7 @@ export default function LoginPage() {
 
     async function handleLogout() {
         await fetch("/api/auth/logout", { method: "POST" });
+        await refresh();
     }
 
     return (

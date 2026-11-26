@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import MovieModal, { type MovieItem } from "./MovieModal";
 import { useAdmin } from "./useAdmin";
+import { useAuth } from "../AuthProvider";
 
 // 상세 페이지의 관리자 전용 버튼(수정·삭제). 방문자에게는 아무것도 렌더링하지 않는다.
 export default function MovieAdminActions({ movie, posterOptions }: { movie: MovieItem; posterOptions: string[] }) {
     const admin = useAdmin();
+    const { refresh } = useAuth();
     const router = useRouter();
     const [editing, setEditing] = useState(false);
     const [confirming, setConfirming] = useState(false);
@@ -44,7 +46,10 @@ export default function MovieAdminActions({ movie, posterOptions }: { movie: Mov
                 return;
             }
             setConfirming(false);
-            if (response.status === 401) setMessage("로그인이 필요합니다. 다시 로그인해 주세요.");
+            if (response.status === 401) {
+                setMessage("로그인이 필요합니다. 다시 로그인해 주세요.");
+                await refresh(); // 세션이 만료됐으면 관리자 UI 를 숨긴다
+            }
             else if (response.status === 404) setMessage("이미 삭제된 영화입니다.");
             else if (response.status === 429) setMessage("요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.");
             else setMessage("삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.");

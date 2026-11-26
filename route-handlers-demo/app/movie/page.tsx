@@ -32,17 +32,30 @@ export default function MoviePage() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [query, setQuery] = useState('');
     const [adding, setAdding] = useState(false);
+    const [loaded, setLoaded] = useState(false);
     const admin = useAdmin();
     const posterOptions = [...new Set(movies.map((m) => m.poster).filter(Boolean))];
 
     async function loadMovies() {
-        const response = await fetch('/api/movie');
-        setMovies(await response.json());
+        try {
+            const response = await fetch('/api/movie');
+            setMovies(await response.json());
+        } catch {
+            // 실패하면 기존 목록을 유지한다
+        } finally {
+            setLoaded(true);
+        }
     }
 
     async function searchMovie() {
-        const response = await fetch(`/api/movie?query=${encodeURIComponent(query)}`);
-        setMovies(await response.json());
+        try {
+            const response = await fetch(`/api/movie?query=${encodeURIComponent(query)}`);
+            setMovies(await response.json());
+        } catch {
+            // 실패하면 기존 목록을 유지한다
+        } finally {
+            setLoaded(true);
+        }
     }
 
     useEffect(() => {
@@ -90,10 +103,10 @@ export default function MoviePage() {
                     </li>
                 ))}
             </ul>
-            {movies.length === 0 && <p className="py-10 text-center opacity-60">검색 결과가 없습니다.</p>}
-            <a href="/" className="mt-8 inline-block rounded-lg border border-gray-400/60 px-4 py-2 hover:bg-gray-400/10">
+            {loaded && movies.length === 0 && <p className="py-10 text-center opacity-60">검색 결과가 없습니다.</p>}
+            <Link href="/" className="mt-8 inline-block rounded-lg border border-gray-400/60 px-4 py-2 hover:bg-gray-400/10">
                 돌아가기
-            </a>
+            </Link>
         </div>
     );
 }
