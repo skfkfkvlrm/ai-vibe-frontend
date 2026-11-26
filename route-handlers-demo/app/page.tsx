@@ -9,6 +9,7 @@ export default function Home() {
         <li>
           <Link href="/comments">Comments</Link><br />
           <Link href="/movie">Movie</Link><br />
+          <Link href="/login">Login</Link><br />
         </li>
       </ul>
     </div>
