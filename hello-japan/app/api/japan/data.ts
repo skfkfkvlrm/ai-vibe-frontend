@@ -89,4 +89,16 @@ export const destinations: Destination[] = [
       zh: { name: '青森', sea: '奥入濑溪流、弘前城樱花、睡魔祭', eat: '苹果、扇贝、青森金枪鱼' },
     },
   },
+  {
+    id: 7,
+    name: '나가사키',
+    sea: '이나사산 야경, 글로버 정원, 데지마, 오우라 천주당',
+    eat: '나가사키 짬뽕, 사라우동, 카스텔라, 샤포 요리',
+    picture: '/images/nagasaki.jpg',
+    i18n: {
+      en: { name: 'Nagasaki', sea: 'Night view from Mount Inasa, Glover Garden, Dejima, Oura Church', eat: 'Nagasaki champon, sara udon, castella, shippoku cuisine' },
+      ja: { name: '長崎', sea: '稲佐山の夜景、グラバー園、出島、大浦天主堂', eat: '長崎ちゃんぽん、皿うどん、カステラ、卓袱料理' },
+      zh: { name: '长崎', sea: '稻佐山夜景、哥拉巴园、出岛、大浦天主堂', eat: '长崎什锦面、什锦炒面、蜂蜜蛋糕、桌袱料理' },
+    },
+  },
 ];
