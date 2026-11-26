@@ -347,3 +347,43 @@
   font-size: calc(0.85rem + 2px);
   color: #6b6258;
 }
+
+/* 언어별 서체/자간 — <html lang>에 따라 적용 (넓은 자간은 한자·가나 제목용이라 영문에선 줄인다) */
+.page:lang(ja) {
+  font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", serif;
+}
+
+.page:lang(zh) {
+  font-family: "Noto Serif SC", "Songti SC", "SimSun", "Microsoft YaHei", serif;
+}
+
+.page:lang(en) {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  line-height: 1.5;
+}
+
+.page:lang(en) .modal {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+.page:lang(en) .title,
+.page:lang(en) .cardTitle {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.02em;
+}
+
+.page:lang(en) .subtitle,
+.page:lang(en) .listTitle,
+.page:lang(en) .link,
+.page:lang(en) .button,
+.page:lang(en) .buttonGhost,
+.page:lang(en) .buttonDanger,
+.page:lang(en) .info dt {
+  letter-spacing: 0.01em;
+}
+
+.page:lang(en) .info dd,
+.page:lang(en) .modalMessage {
+  line-height: 1.6;
+  word-break: normal;
+}
