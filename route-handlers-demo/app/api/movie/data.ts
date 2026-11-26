@@ -1,4 +1,5 @@
-export const movie = [
+// 서버 번들이 라우트마다 분리되어 모듈 변수가 복제되므로, 메모리 데이터를 globalThis 에 한 번만 만들어 API 와 서버 컴포넌트가 함께 쓴다
+const initialMovies = [
     {
         id: 1,
         poster: '/image/1.webp',
@@ -110,3 +111,7 @@ export const movie = [
         company: 'Metro-Goldwyn-Mayer, Lord Miller Productions, Pascal Pictures',
     }
 ]
+
+type Movie = (typeof initialMovies)[number];
+const store = globalThis as typeof globalThis & { __movieStore?: Movie[] };
+export const movie: Movie[] = (store.__movieStore ??= initialMovies);

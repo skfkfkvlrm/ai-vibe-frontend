@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { movie } from "../../api/movie/data";
+import MovieAdminActions from "../MovieAdminActions";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -11,6 +12,7 @@ async function MovieDetail({ params }: Props) {
     if (!m) notFound();
 
     const actors = (m.actor ?? '').split(',').map((a) => a.trim()).filter(Boolean);
+    const posterOptions = [...new Set(movie.map((item) => item.poster).filter(Boolean))];
 
     return (
         <div className="mx-auto max-w-[760px] px-5 py-8">
@@ -42,6 +44,7 @@ async function MovieDetail({ params }: Props) {
                     </dl>
                 </div>
             </div>
+            <MovieAdminActions movie={m} posterOptions={posterOptions} />
         </div>
     );
 }

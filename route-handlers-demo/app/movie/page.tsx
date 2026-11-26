@@ -2,15 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import MovieModal, { type MovieItem } from "./MovieModal";
+import { useAdmin } from "./useAdmin";
 
-interface Movie {
-    id: number;
-    title: string;
-    director: string;
-    poster: string;
-    actor: string;
-    count: string;
-}
+type Movie = MovieItem;
 
 // 포스터는 public/image 의 이미지를 표시하고, 로드에 실패하면 제목이 적힌 대체 박스가 나옵니다.
 // 원본 이미지가 가로 200px이라 그 이상 키우면 깨져 보입니다.
@@ -36,6 +31,9 @@ function Poster({ src, title }: { src: string; title: string }) {
 export default function MoviePage() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [query, setQuery] = useState('');
+    const [adding, setAdding] = useState(false);
+    const admin = useAdmin();
+    const posterOptions = [...new Set(movies.map((m) => m.poster).filter(Boolean))];
 
     async function loadMovies() {
         const response = await fetch('/api/movie');
@@ -53,7 +51,20 @@ export default function MoviePage() {
 
     return (
         <div className="mx-auto max-w-[760px] px-5 py-8">
-            <h1 className="mb-6 text-3xl font-bold">🎬 영화 목록</h1>
+            <div className="mb-6 flex items-center justify-between gap-4">
+                <h1 className="text-3xl font-bold">🎬 영화 목록</h1>
+                {admin && (
+                    <button onClick={() => setAdding(true)}
+                        className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700">
+                        영화 추가
+                    </button>
+                )}
+            </div>
+            {adding && (
+                <MovieModal mode="create" posterOptions={posterOptions}
+                    onClose={() => setAdding(false)}
+                    onSaved={() => { setQuery(''); loadMovies(); }} />
+            )}
             <div className="mb-8 flex gap-2">
                 <input type="text" placeholder="제목 또는 감독을 입력해주세요."
                     value={query} onChange={(e) => setQuery(e.target.value)}
