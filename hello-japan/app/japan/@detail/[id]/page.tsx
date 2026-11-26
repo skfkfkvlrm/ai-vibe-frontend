@@ -1,19 +1,19 @@
 import Image from "next/image";
+import { connection } from "next/server";
 import { notFound } from "next/navigation";
-import { destinations, getDestination } from "../../../api/japan/data";
+import AdminActions from "../../../_components/AdminActions";
+import { getById } from "../../../api/japan/store";
+import { parseId } from "../../../api/japan/validate";
 import styles from "../../japan.module.css";
-
-export function generateStaticParams() {
-  return destinations.map((d) => ({ id: String(d.id) }));
-}
 
 export default async function DetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const dest = getDestination(Number(id));
+  await connection(); // 데이터가 수정될 수 있으므로 요청 시점에 렌더링
+  const id = parseId((await params).id);
+  const dest = id === null ? undefined : await getById(id);
   if (!dest) notFound();
 
   return (
@@ -33,6 +33,7 @@ export default async function DetailPage({
         <dt>먹거리</dt>
         <dd>{dest.eat}</dd>
       </dl>
+      <AdminActions id={dest.id} />
     </article>
   );
 }

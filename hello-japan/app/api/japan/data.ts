@@ -51,6 +51,3 @@ export const destinations: Destination[] = [
   },
 ];
 
-export function getDestination(id: number): Destination | undefined {
-  return destinations.find((d) => d.id === id);
-}
