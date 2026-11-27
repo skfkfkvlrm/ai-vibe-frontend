@@ -1,5 +1,5 @@
 // Llama2 엔드포인트 중계 (브라우저 CORS 회피, 내부 IP 비노출)
-const ENDPOINT = "http://192.168.2.18:9292/api/v1/generate";
+const ENDPOINT = "http://192.168.0.12:9292/api/v1/generate";
 const TIMEOUT_MS = 120_000;
 const ANSWER_KEYS = ["text", "response", "answer", "result", "message", "content", "output"];
 
