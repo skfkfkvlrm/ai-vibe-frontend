@@ -1,11 +1,11 @@
 import { StaticImageData } from "next/image";
-import photo1 from "./images/jeju/1.jpg";
-import photo2 from "./images/jeju/2.jpg";
-import photo3 from "./images/jeju/3.jpg";
-import photo4 from "./images/jeju/4.jpg";
-import photo5 from "./images/jeju/5.jpg";
-import photo6 from "./images/jeju/6.jpg";
-import photo7 from "./images/jeju/7.jpg";
+import photo1 from "./jeju/1.jpg";
+import photo2 from "./jeju/2.jpg";
+import photo3 from "./jeju/3.jpg";
+import photo4 from "./jeju/4.jpg";
+import photo5 from "./jeju/5.jpg";
+import photo6 from "./jeju/6.jpg";
+import photo7 from "./jeju/7.jpg";
 
 export type JejuImage = {
   id: string;
@@ -15,7 +15,7 @@ export type JejuImage = {
   location: string;
 };
 
-const wondersImages: WonderImage[] = [
+const wondersImages: JejuImage[] = [
   {
     id: "1",
     name: "폭포",
