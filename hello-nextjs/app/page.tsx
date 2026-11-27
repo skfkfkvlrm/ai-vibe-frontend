@@ -26,6 +26,7 @@ export default function Home() {
           <a href='/posts'>게시글</a><br />
           <a href='/taxi'>택시</a><br />
           <a href='/starbucks'>스타벅스</a><br />
+          <a href='/photo-feed'>제주도사진</a><br />
         </div>
       </h1>
     </div>
