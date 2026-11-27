@@ -8,10 +8,12 @@ export default async function PhotoDetail(
     const photo = wondersImages.find((p) => p.id === id);
     if (!photo) notFound();
     return (
-        <main className="grid grid-cols-1 md:grid-cols-3 gap-1">
-            <Image alt={photo.name} src={photo.src}
-                className="w-full object-cover aspect-square" />
+        <div>
+            <main className="grid grid-cols-1 md:grid-cols-3 gap-1">
+                <Image alt={photo.name} src={photo.src}
+                    className="w-full object-cover aspect-square" />
+            </main>
             <button><a href='/photo-feed'>돌아가기</a></button>
-        </main>
+        </div>
     )
 }
