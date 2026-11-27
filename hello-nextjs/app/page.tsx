@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 
 export default function Home() {
@@ -23,6 +24,8 @@ export default function Home() {
           <a href='/cats'>고양이</a><br />
           <a href='/dogs'>강아지</a><br />
           <a href='/posts'>게시글</a><br />
+          <a href='/taxi'>택시</a><br />
+          <a href='/starbucks'>스타벅스</a><br />
         </div>
       </h1>
     </div>
